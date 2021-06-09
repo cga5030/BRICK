@@ -620,8 +620,7 @@ log.post = function(  parameters.in,
       )
         
       if (experts){
-        lpri.experts <- lpri + log_exp_lognorm(brick.out)
-        lpost <- lpri.experts
+        lpost <- lpost + log_exp_lognorm(brick.out)
       }
       
       if (alldata){
