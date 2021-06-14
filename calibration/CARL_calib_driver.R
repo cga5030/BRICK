@@ -4,16 +4,17 @@ rm(list=ls())                        # Clear all previous variables
 
 ## Set up MCMC stuff here so that it can be automated for HPC
 nnode_mcmc000 <- 1
-niter_mcmc000 <- 4e7 # 1e6 for BRICK, 1e5 for DAIS
+niter_mcmc000 <- 2e7 # 1e6 for BRICK, 1e5 for DAIS
 gamma_mcmc000 <- 0.51    # rate of adaptation (between 0.5 and 1, lower is faster adaptation)
-accept_mcmc000 <- 0.15  # Optimal as # parameters->infinity (Gelman et al, 1996; Roberts et al, 1997)
-experts=TRUE # invert expert assessment?
-alldata=FALSE # invert paleo and instrumental data?
+accept_mcmc000 <- 0.15  # changed to 0.15 to help the sampler explore the space more carefully
+                        # from Tony's 0.234: "Optimal as # parameters->infinity (Gelman et al, 1996; Roberts et al, 1997)" (Wong et al., 2017)
+experts=TRUE # do you wish to invert expert assessment?
+alldata=TRUE # do you wish to invert paleo and instrumental data?
 
 if(alldata){
-  configure <- '_Complete_0609_4e7_' # configure for your run
+  configure <- '_Complete_0614_2e7_' # configure for your run
 } else{
-    configure <- '_Expert_0609_4e7_' # configure for your run
+    configure <- '_Expert_0614_2e7_' # configure for your run
   }
 
 ## Show plots? (probably want FALSE on HPC, non-interactive)
@@ -625,7 +626,7 @@ saveRDS(amcmc.out,file <- filename.RDS)
 ## Save workspace image - you do not want to re-simulate all those!
 save.image(file=filename.saveprogress)
 time.elapsed <- t.end - t.beg
-print("line 628")
+print("line 629")
 print(time.elapsed)
 
 
@@ -698,7 +699,7 @@ for (pp in 1:length(parnames)){
 t.end <- proc.time()
 time.elapsed <- t.end - t.beg
 save.image(file=filename.saveprogress)
-print("line 701")
+print("line 702")
 print(time.elapsed)
 print("TEDDY IS A CUTE PUPPER")
     
