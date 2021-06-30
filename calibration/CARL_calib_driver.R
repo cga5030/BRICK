@@ -4,7 +4,7 @@ rm(list=ls())                        # Clear all previous variables
 
 ## Set up MCMC stuff here so that it can be automated for HPC
 nnode_mcmc000 <- 4
-niter_mcmc000 <- 2e5 # 1e6 for BRICK, 1e5 for DAIS
+niter_mcmc000 <- 2.5e6 # 1e6 for BRICK, 1e5 for DAIS
 gamma_mcmc000 <- 0.51    # rate of adaptation (between 0.5 and 1, lower is faster adaptation)
 accept_mcmc000 <- 0.15  # changed to 0.15 to help the sampler explore the space more carefully
                         # from Tony's 0.234: "Optimal as # parameters->infinity (Gelman et al, 1996; Roberts et al, 1997)" (Wong et al., 2017)
@@ -586,6 +586,8 @@ if(nnode.mcmc == 1) {
                              
                              )
   t.end <- proc.time()
+  
+  chain1 <- amcmc.out[[1]][1]$samples
 }
 
 if(luse.sneasy) {cleanup.sneasy()}  # deallocates memory after SNEASY is done
