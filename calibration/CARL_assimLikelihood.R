@@ -684,6 +684,97 @@ log.post = function(  parameters.in,
   # print(paste0("lpost: ", lpost))
   return(lpost)
 }
+
+##==============================================================================
+## (log of the) posterior distribution:  posterior ~ likelihood * prior
+neg.log.post = function(  parameters.in,
+                      parnames.in,
+                      forcing.in,
+                      bound.lower.in,
+                      bound.upper.in,
+                      l.project=FALSE,
+                      rho.simple.in=NULL,
+                      sigma.simple.in=NULL,
+                      shape.in,
+                      scale.in,
+                      slope.Ta2Tg.in=1,
+                      intercept.Ta2Tg.in=0,
+                      mod.time,
+                      ind.norm.data,
+                      ind.norm.sl,
+                      midx,
+                      oidx,
+                      obs,
+                      obs.err,
+                      trends.te,
+                      luse.brick,
+                      i0,
+                      l.aisfastdy=TRUE,
+                      obs.in, obs.err.in, obs.step.in,
+                      trends.ais.in , trends.err.in , ind.trends.in ,
+                      ind.norm.in,
+                      alpha.var,
+                      beta.var,
+                      shape.lambda=NULL,
+                      rate.lambda=NULL,
+                      shape.Tcrit=NULL,
+                      rate.Tcrit=NULL,
+                      Tg.in=NULL,
+                      Toc.in=NULL,
+                      Ta.in=NULL,
+                      SL.in,
+                      dSL.in,
+                      experts,
+                      alldata
+){
+  
+  # evaluate log posterior
+  lp = log.post (  parameters.in,
+                        parnames.in,
+                        forcing.in,
+                        bound.lower.in,
+                        bound.upper.in,
+                        l.project,
+                        rho.simple.in,
+                        sigma.simple.in,
+                        shape.in,
+                        scale.in,
+                        slope.Ta2Tg.in,
+                        intercept.Ta2Tg.in,
+                        mod.time,
+                        ind.norm.data,
+                        ind.norm.sl,
+                        midx,
+                        oidx,
+                        obs,
+                        obs.err,
+                        trends.te,
+                        luse.brick,
+                        i0,
+                        l.aisfastdy,
+                        obs.in, obs.err.in, obs.step.in,
+                        trends.ais.in , trends.err.in , ind.trends.in ,
+                        ind.norm.in,
+                        alpha.var,
+                        beta.var,
+                        shape.lambda,
+                        rate.lambda,
+                        shape.Tcrit,
+                        rate.Tcrit,
+                        Tg.in,
+                        Toc.in,
+                        Ta.in,
+                        SL.in,
+                        dSL.in,
+                        experts,
+                        alldata
+  )
+  
+  # return negative log posterior
+  return(-1*lp)
+}
+
+
 ##==============================================================================
 ## End
 ##==============================================================================
