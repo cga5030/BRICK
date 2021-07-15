@@ -6,13 +6,14 @@ t.beg <- proc.time() #start timer
 # configure these
 experts=TRUE # do you wish to invert expert assessment?
 alldata=TRUE # do you wish to invert paleo and instrumental data?
-configure <- '_EXPLORE_0701_' # configure filename for output files
-deoptim.out <- readRDS("CARL_MAP_MAP_0630_1e3_30Jun2021.rds",refhook = NULL) # select MAP
-niter <- 50 # number of samples across prior range
+configure <- '_EXPLORE_0715_' # configure filename for output files
+deoptim.out <- readRDS("CARL_MAP_MAP_0713_2.4e3_13Jul2021.rds",refhook = NULL) # select MAP
+amcmc.out <- readRDS("CARL_calib_amcmc_out_Complete_0614_2e7_14Jun2021.rds",refhook = NULL)
+niter <- 100 # number of samples across prior range
 
 ## Set up a filename for saving RData images along the way
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
-filename.saveprogress <- paste('CARL_calib_MCMC',configure,today,'.RData',sep='')
+filename.saveprogress <- paste('CARL_explore_parameters',configure,today,'.RData',sep='')
 
 ## Use the AIS fast dynamics emulator (Wong et al., 2017)
 l.aisfastdy <- TRUE
@@ -318,6 +319,10 @@ for (pp in 1:length(parnames)){
   my.parameters <- MAP.deoptim
   par.range <- seq(from=bound.lower[pp], to=bound.upper[pp], length = niter)
   
+  if (pp==7)(
+    par.range <- seq(from=0, to= 0.005, length=niter)
+  )
+  
   for (i in 1:length(par.range)){
     
     my.parameters[pp] <- par.range[i]
@@ -361,6 +366,17 @@ sequence3 = c(9,10,11,12,13)
 sequence4 = c(1,2,3,4)
 sequence5 = c(29,30,31,32,33)
 
+cexlab = 2
+
+## specify window for posterior marginal distributions
+chain_complete <- amcmc.out$samples[5e6:20e6,] # 5 million to 20 million
+
+## get posterior densities
+chain_densities <- replicate(length(parnames), vector("list", 7), simplify = FALSE)
+for (pp in 1:length(parnames)){
+  chain_densities[[pp]] <- density(chain_complete[,pp])
+}
+
 # Trace plots for Antarctic parameters
 if(TRUE){
   print("beginning antarctic plots")
@@ -368,7 +384,111 @@ if(TRUE){
   png(filename=filename.trace1, width=1920, height=1080, units ="px")
   par(mfrow=c(3,5))
   for (pp in sequence1) {
-    plot(x=my.changing.parameter[,pp],y=my.logpost[,pp],xlab=parnames[pp],ylab="log post")
+    
+    # prune posterior
+    thisposterior = matrix(NA, nrow = length(chain_densities[[pp]]$x), ncol = 2)
+    thisposterior[,1] = chain_densities[[pp]]$x
+    thisposterior[,2] = chain_densities[[pp]]$y
+    
+    thisposterior_keep = as.data.frame(thisposterior)
+    
+    # prune posterior to 
+    for (i in 1:length(chain_densities[[pp]]$x)){
+      if (thisposterior[i,1]<min(my.changing.parameter[,pp]) | thisposterior[i,1]>max(my.changing.parameter[,pp])) {
+        thisposterior_keep[i,2]=NA
+      } else {
+        thisposterior_keep[i,2]=thisposterior[i,2]
+      }
+    }
+    
+    thisposterior_keep <- thisposterior_keep[complete.cases(thisposterior_keep), ]
+    
+    #find matching length of logposts     
+    this.logpost <- as.data.frame(matrix(NA, nrow = length(thisposterior_keep$V1), ncol = 1))
+    this.changing.parameter <- this.logpost
+    
+    this.parameter <- MAP.deoptim
+    par.range <- seq(from=bound.lower[pp], to=bound.upper[pp], length = length(thisposterior_keep$V1))
+    
+    if (pp==7)(
+      par.range <- seq(from=0, to= 0.005, length=length(thisposterior_keep$V1))
+    )
+    
+    for (i in 1:length(par.range)){
+      this.parameter[pp] <- par.range[i]
+      this.changing.parameter[i,1] <- this.parameter[pp]
+      this.logpost[i,1] <- log.post(parameters.in = this.parameter,
+                                    
+                                    # BRICK:
+                                    parnames.in=parnames           , forcing.in=forcing         , l.project=l.project           ,
+                                    slope.Ta2Tg.in=slope.Ta2Tg     , intercept.Ta2Tg.in=intercept.Ta2Tg                         ,
+                                    ind.norm.data=ind.norm.data    , ind.norm.sl=ind.norm       , mod.time=mod.time             ,
+                                    oidx = oidx.all                , midx = midx.all            , obs=obs.all                   ,
+                                    obs.err = obs.err.all          , trends.te = trends.te      , bound.lower.in=bound.lower    ,
+                                    bound.upper.in=bound.upper     , shape.in=shape.invtau      , scale.in=scale.invtau         ,
+                                    luse.brick=luse.brick          , i0=i0                      , l.aisfastdy=l.aisfastdy       ,
+                                    
+                                    # DAIS:
+                                    obs.in=obs.targets             , obs.err.in=obs.err.dais    , obs.step.in=obs.years         ,
+                                    trends.ais.in=trends.ais       , trends.err.in=trends.err   , ind.trends.in=ind.trends      ,
+                                    ind.norm.in=ind.relative       , alpha.var=alpha.var        , beta.var=beta.var             ,
+                                    #slope.Ta2Tg.in=slope.Ta2Tg , intercept.Ta2Tg.in=intercept.Ta2Tg , # already accounted for above 
+                                    Tg.in=Tg.recon                 ,
+                                    shape.lambda=shape.lambda      , rate.lambda=rate.lambda    , shape.Tcrit=shape.Tcrit       ,
+                                    rate.Tcrit=rate.Tcrit          , 
+                                    #l.aisfastdy=l.aisfastdy, # already accounted for above 
+                                    #Ta.in=Ta  , Toc.in=Toc , # Tony left this commented
+                                    SL.in=SL                       , dSL.in=dSL                 , 
+                                    
+                                    # Configure
+                                    experts=experts                , alldata=alldata)
+    }
+    
+    # Scale posterior:
+    log_max = max(this.logpost$V1)
+    log_min = min(this.logpost$V1[which(this.logpost$V1 > 0)])
+    span = log_max - log_min
+    scale = span/(max(thisposterior_keep$V2)-min(thisposterior_keep$V2))
+    
+    thisposterior_scaled <- thisposterior_keep
+    thisposterior_scaled[,2] <- scale*thisposterior_scaled[,2]+log_min
+    names(thisposterior_scaled) <- c("x","y")
+    
+    # BEGIN PLOT!!!
+    plot(x=thisposterior_scaled$x,y=thisposterior_scaled$y, type="l", lwd=3, 
+         col="orange",xlab=parnames[pp],ylab="log post",
+         cex.lab=cexlab)
+    
+    # MAP:
+    abline(v=MAP.deoptim[pp], col="red")
+    
+    # marginal mode
+    thisposterior_x <- thisposterior_scaled[which.max(thisposterior_scaled[,2]),1]
+    abline(v=thisposterior_x,col="blue")
+    
+    # right axis
+    axis(side = 4, 
+         at=seq(from=min(thisposterior_scaled[,2]), to=max(thisposterior_scaled[,2]),length.out=5),
+         col="orange",lwd=3, col.axis="orange")
+    # mtext("log posterior", side = 4, line = 3, cex = 1.5)
+    
+    # priors:
+    x = seq(from=bound.lower[pp],to=bound.upper[pp],length.out=1000)
+    lines(x,scale*dunif(x, min = bound.lower[pp], max = bound.upper[pp])+log_min,
+          col="black", lwd=1, lty=2)
+    
+    # log post
+    lines(x=this.changing.parameter$V1,y=this.logpost$V1)
+    
+    # # legend
+    # legend(x="topright",
+    #        legend=c("Log posterior",
+    #                 "Scaled marginal posterior",
+    #                 "MAP estimate",
+    #                 "Prior"),
+    #        col=c("black","orange","red","black"), lwd=c(1,3,1,1),
+    #        lty=c(1,1,1,2))
+    
   }
   dev.off()
 } # End of if true
@@ -380,20 +500,440 @@ if(TRUE){
   png(filename=filename.trace2, width=1920, height=1080, units ="px")
   par(mfrow=c(3,6))
   for (pp in sequence2){
-    plot(x=my.changing.parameter[,pp],y=my.logpost[,pp],xlab=parnames[pp],ylab="log post")
+    
+    # prune posterior
+    thisposterior = matrix(NA, nrow = length(chain_densities[[pp]]$x), ncol = 2)
+    thisposterior[,1] = chain_densities[[pp]]$x
+    thisposterior[,2] = chain_densities[[pp]]$y
+    
+    thisposterior_keep = as.data.frame(thisposterior)
+    
+    # prune posterior to 
+    for (i in 1:length(chain_densities[[pp]]$x)){
+      if (thisposterior[i,1]<min(my.changing.parameter[,pp]) | thisposterior[i,1]>max(my.changing.parameter[,pp])) {
+        thisposterior_keep[i,2]=NA
+      } else {
+        thisposterior_keep[i,2]=thisposterior[i,2]
+      }
+    }
+    
+    thisposterior_keep <- thisposterior_keep[complete.cases(thisposterior_keep), ]
+    
+    #find matching length of logposts     
+    this.logpost <- as.data.frame(matrix(NA, nrow = length(thisposterior_keep$V1), ncol = 1))
+    this.changing.parameter <- this.logpost
+    
+    this.parameter <- MAP.deoptim
+    par.range <- seq(from=bound.lower[pp], to=bound.upper[pp], length = length(thisposterior_keep$V1))
+    
+    if (pp==7)(
+      par.range <- seq(from=0, to= 0.005, length=length(thisposterior_keep$V1))
+    )
+    
+    for (i in 1:length(par.range)){
+      this.parameter[pp] <- par.range[i]
+      this.changing.parameter[i,1] <- this.parameter[pp]
+      this.logpost[i,1] <- log.post(parameters.in = this.parameter,
+                                    
+                                    # BRICK:
+                                    parnames.in=parnames           , forcing.in=forcing         , l.project=l.project           ,
+                                    slope.Ta2Tg.in=slope.Ta2Tg     , intercept.Ta2Tg.in=intercept.Ta2Tg                         ,
+                                    ind.norm.data=ind.norm.data    , ind.norm.sl=ind.norm       , mod.time=mod.time             ,
+                                    oidx = oidx.all                , midx = midx.all            , obs=obs.all                   ,
+                                    obs.err = obs.err.all          , trends.te = trends.te      , bound.lower.in=bound.lower    ,
+                                    bound.upper.in=bound.upper     , shape.in=shape.invtau      , scale.in=scale.invtau         ,
+                                    luse.brick=luse.brick          , i0=i0                      , l.aisfastdy=l.aisfastdy       ,
+                                    
+                                    # DAIS:
+                                    obs.in=obs.targets             , obs.err.in=obs.err.dais    , obs.step.in=obs.years         ,
+                                    trends.ais.in=trends.ais       , trends.err.in=trends.err   , ind.trends.in=ind.trends      ,
+                                    ind.norm.in=ind.relative       , alpha.var=alpha.var        , beta.var=beta.var             ,
+                                    #slope.Ta2Tg.in=slope.Ta2Tg , intercept.Ta2Tg.in=intercept.Ta2Tg , # already accounted for above 
+                                    Tg.in=Tg.recon                 ,
+                                    shape.lambda=shape.lambda      , rate.lambda=rate.lambda    , shape.Tcrit=shape.Tcrit       ,
+                                    rate.Tcrit=rate.Tcrit          , 
+                                    #l.aisfastdy=l.aisfastdy, # already accounted for above 
+                                    #Ta.in=Ta  , Toc.in=Toc , # Tony left this commented
+                                    SL.in=SL                       , dSL.in=dSL                 , 
+                                    
+                                    # Configure
+                                    experts=experts                , alldata=alldata)
+    }
+    
+    # Scale posterior:
+    log_max = max(this.logpost$V1)
+    log_min = min(this.logpost$V1[which(this.logpost$V1 > 0)])
+    span = log_max - log_min
+    scale = span/(max(thisposterior_keep$V2)-min(thisposterior_keep$V2))
+    
+    thisposterior_scaled <- thisposterior_keep
+    thisposterior_scaled[,2] <- scale*thisposterior_scaled[,2]+log_min
+    names(thisposterior_scaled) <- c("x","y")
+    
+    # BEGIN PLOT!!!
+    plot(x=thisposterior_scaled$x,y=thisposterior_scaled$y, type="l", lwd=3, 
+         col="orange",xlab=parnames[pp],ylab="log post",
+         cex.lab=cexlab)
+    
+    # MAP:
+    abline(v=MAP.deoptim[pp], col="red")
+    
+    # marginal mode
+    thisposterior_x <- thisposterior_scaled[which.max(thisposterior_scaled[,2]),1]
+    abline(v=thisposterior_x,col="blue")
+    
+    # right axis
+    axis(side = 4, 
+         at=seq(from=min(thisposterior_scaled[,2]), to=max(thisposterior_scaled[,2]),length.out=5),
+         col="orange",lwd=3, col.axis="orange")
+    # mtext("log posterior", side = 4, line = 3, cex = 1.5)
+    
+    # priors:
+    x = seq(from=bound.lower[pp],to=bound.upper[pp],length.out=1000)
+    lines(x,scale*dunif(x, min = bound.lower[pp], max = bound.upper[pp])+log_min,
+          col="black", lwd=1, lty=2)
+    
+    # log post
+    lines(x=this.changing.parameter$V1,y=this.logpost$V1)
+    
+    # # legend
+    # legend(x="topright",
+    #        legend=c("Log posterior",
+    #                 "Scaled marginal posterior",
+    #                 "MAP estimate",
+    #                 "Prior"),
+    #        col=c("black","orange","red","black"), lwd=c(1,3,1,1),
+    #        lty=c(1,1,1,2))
+    
   }
   
   for (pp in sequence3){
-    plot(x=my.changing.parameter[,pp],y=my.logpost[,pp],xlab=parnames[pp],ylab="log post")
+    
+    # prune posterior
+    thisposterior = matrix(NA, nrow = length(chain_densities[[pp]]$x), ncol = 2)
+    thisposterior[,1] = chain_densities[[pp]]$x
+    thisposterior[,2] = chain_densities[[pp]]$y
+    
+    thisposterior_keep = as.data.frame(thisposterior)
+    
+    # prune posterior to 
+    for (i in 1:length(chain_densities[[pp]]$x)){
+      if (thisposterior[i,1]<min(my.changing.parameter[,pp]) | thisposterior[i,1]>max(my.changing.parameter[,pp])) {
+        thisposterior_keep[i,2]=NA
+      } else {
+        thisposterior_keep[i,2]=thisposterior[i,2]
+      }
+    }
+    
+    thisposterior_keep <- thisposterior_keep[complete.cases(thisposterior_keep), ]
+    
+    #find matching length of logposts     
+    this.logpost <- as.data.frame(matrix(NA, nrow = length(thisposterior_keep$V1), ncol = 1))
+    this.changing.parameter <- this.logpost
+    
+    this.parameter <- MAP.deoptim
+    par.range <- seq(from=bound.lower[pp], to=bound.upper[pp], length = length(thisposterior_keep$V1))
+    
+    if (pp==7)(
+      par.range <- seq(from=0, to= 0.005, length=length(thisposterior_keep$V1))
+    )
+    
+    for (i in 1:length(par.range)){
+      this.parameter[pp] <- par.range[i]
+      this.changing.parameter[i,1] <- this.parameter[pp]
+      this.logpost[i,1] <- log.post(parameters.in = this.parameter,
+                                    
+                                    # BRICK:
+                                    parnames.in=parnames           , forcing.in=forcing         , l.project=l.project           ,
+                                    slope.Ta2Tg.in=slope.Ta2Tg     , intercept.Ta2Tg.in=intercept.Ta2Tg                         ,
+                                    ind.norm.data=ind.norm.data    , ind.norm.sl=ind.norm       , mod.time=mod.time             ,
+                                    oidx = oidx.all                , midx = midx.all            , obs=obs.all                   ,
+                                    obs.err = obs.err.all          , trends.te = trends.te      , bound.lower.in=bound.lower    ,
+                                    bound.upper.in=bound.upper     , shape.in=shape.invtau      , scale.in=scale.invtau         ,
+                                    luse.brick=luse.brick          , i0=i0                      , l.aisfastdy=l.aisfastdy       ,
+                                    
+                                    # DAIS:
+                                    obs.in=obs.targets             , obs.err.in=obs.err.dais    , obs.step.in=obs.years         ,
+                                    trends.ais.in=trends.ais       , trends.err.in=trends.err   , ind.trends.in=ind.trends      ,
+                                    ind.norm.in=ind.relative       , alpha.var=alpha.var        , beta.var=beta.var             ,
+                                    #slope.Ta2Tg.in=slope.Ta2Tg , intercept.Ta2Tg.in=intercept.Ta2Tg , # already accounted for above 
+                                    Tg.in=Tg.recon                 ,
+                                    shape.lambda=shape.lambda      , rate.lambda=rate.lambda    , shape.Tcrit=shape.Tcrit       ,
+                                    rate.Tcrit=rate.Tcrit          , 
+                                    #l.aisfastdy=l.aisfastdy, # already accounted for above 
+                                    #Ta.in=Ta  , Toc.in=Toc , # Tony left this commented
+                                    SL.in=SL                       , dSL.in=dSL                 , 
+                                    
+                                    # Configure
+                                    experts=experts                , alldata=alldata)
+    }
+    
+    # Scale posterior:
+    log_max = max(this.logpost$V1)
+    log_min = min(this.logpost$V1[which(this.logpost$V1 > 0)])
+    span = log_max - log_min
+    scale = span/(max(thisposterior_keep$V2)-min(thisposterior_keep$V2))
+    
+    thisposterior_scaled <- thisposterior_keep
+    thisposterior_scaled[,2] <- scale*thisposterior_scaled[,2]+log_min
+    names(thisposterior_scaled) <- c("x","y")
+    
+    # BEGIN PLOT!!!
+    plot(x=thisposterior_scaled$x,y=thisposterior_scaled$y, type="l", lwd=3, 
+         col="orange",xlab=parnames[pp],ylab="log post",
+         cex.lab=cexlab)
+    
+    # MAP:
+    abline(v=MAP.deoptim[pp], col="red")
+    
+    # marginal mode
+    thisposterior_x <- thisposterior_scaled[which.max(thisposterior_scaled[,2]),1]
+    abline(v=thisposterior_x,col="blue")
+    
+    # right axis
+    axis(side = 4, 
+         at=seq(from=min(thisposterior_scaled[,2]), to=max(thisposterior_scaled[,2]),length.out=5),
+         col="orange",lwd=3, col.axis="orange")
+    # mtext("log posterior", side = 4, line = 3, cex = 1.5)
+    
+    # priors:
+    x = seq(from=bound.lower[pp],to=bound.upper[pp],length.out=1000)
+    lines(x,scale*dunif(x, min = bound.lower[pp], max = bound.upper[pp])+log_min,
+          col="black", lwd=1, lty=2)
+    
+    # log post
+    lines(x=this.changing.parameter$V1,y=this.logpost$V1)
+    
+    # # legend
+    # legend(x="topright",
+    #        legend=c("Log posterior",
+    #                 "Scaled marginal posterior",
+    #                 "MAP estimate",
+    #                 "Prior"),
+    #        col=c("black","orange","red","black"), lwd=c(1,3,1,1),
+    #        lty=c(1,1,1,2))
+    
   }
   
   for (pp in sequence4){
-    plot(x=my.changing.parameter[,pp],y=my.logpost[,pp],xlab=parnames[pp],ylab="log post")
+    
+
+    
+    # prune posterior
+    thisposterior = matrix(NA, nrow = length(chain_densities[[pp]]$x), ncol = 2)
+    thisposterior[,1] = chain_densities[[pp]]$x
+    thisposterior[,2] = chain_densities[[pp]]$y
+    
+    thisposterior_keep = as.data.frame(thisposterior)
+    
+    # prune posterior to 
+    for (i in 1:length(chain_densities[[pp]]$x)){
+      if (thisposterior[i,1]<min(my.changing.parameter[,pp]) | thisposterior[i,1]>max(my.changing.parameter[,pp])) {
+        thisposterior_keep[i,2]=NA
+      } else {
+        thisposterior_keep[i,2]=thisposterior[i,2]
+      }
+    }
+    
+    thisposterior_keep <- thisposterior_keep[complete.cases(thisposterior_keep), ]
+    
+    #find matching length of logposts     
+    this.logpost <- as.data.frame(matrix(NA, nrow = length(thisposterior_keep$V1), ncol = 1))
+    this.changing.parameter <- this.logpost
+    
+    this.parameter <- MAP.deoptim
+    par.range <- seq(from=bound.lower[pp], to=bound.upper[pp], length = length(thisposterior_keep$V1))
+    
+    if (pp==7)(
+      par.range <- seq(from=0, to= 0.005, length=length(thisposterior_keep$V1))
+    )
+    
+    for (i in 1:length(par.range)){
+      this.parameter[pp] <- par.range[i]
+      this.changing.parameter[i,1] <- this.parameter[pp]
+      this.logpost[i,1] <- log.post(parameters.in = this.parameter,
+                                    
+                                    # BRICK:
+                                    parnames.in=parnames           , forcing.in=forcing         , l.project=l.project           ,
+                                    slope.Ta2Tg.in=slope.Ta2Tg     , intercept.Ta2Tg.in=intercept.Ta2Tg                         ,
+                                    ind.norm.data=ind.norm.data    , ind.norm.sl=ind.norm       , mod.time=mod.time             ,
+                                    oidx = oidx.all                , midx = midx.all            , obs=obs.all                   ,
+                                    obs.err = obs.err.all          , trends.te = trends.te      , bound.lower.in=bound.lower    ,
+                                    bound.upper.in=bound.upper     , shape.in=shape.invtau      , scale.in=scale.invtau         ,
+                                    luse.brick=luse.brick          , i0=i0                      , l.aisfastdy=l.aisfastdy       ,
+                                    
+                                    # DAIS:
+                                    obs.in=obs.targets             , obs.err.in=obs.err.dais    , obs.step.in=obs.years         ,
+                                    trends.ais.in=trends.ais       , trends.err.in=trends.err   , ind.trends.in=ind.trends      ,
+                                    ind.norm.in=ind.relative       , alpha.var=alpha.var        , beta.var=beta.var             ,
+                                    #slope.Ta2Tg.in=slope.Ta2Tg , intercept.Ta2Tg.in=intercept.Ta2Tg , # already accounted for above 
+                                    Tg.in=Tg.recon                 ,
+                                    shape.lambda=shape.lambda      , rate.lambda=rate.lambda    , shape.Tcrit=shape.Tcrit       ,
+                                    rate.Tcrit=rate.Tcrit          , 
+                                    #l.aisfastdy=l.aisfastdy, # already accounted for above 
+                                    #Ta.in=Ta  , Toc.in=Toc , # Tony left this commented
+                                    SL.in=SL                       , dSL.in=dSL                 , 
+                                    
+                                    # Configure
+                                    experts=experts                , alldata=alldata)
+    }
+    
+    # Scale posterior:
+    log_max = max(this.logpost$V1)
+    log_min = min(this.logpost$V1[which(this.logpost$V1 > 0)])
+    span = log_max - log_min
+    scale = span/(max(thisposterior_keep$V2)-min(thisposterior_keep$V2))
+    
+    thisposterior_scaled <- thisposterior_keep
+    thisposterior_scaled[,2] <- scale*thisposterior_scaled[,2]+log_min
+    names(thisposterior_scaled) <- c("x","y")
+    
+    # BEGIN PLOT!!!
+    plot(x=thisposterior_scaled$x,y=thisposterior_scaled$y, type="l", lwd=3, 
+         col="orange",xlab=parnames[pp],ylab="log post",
+         cex.lab=cexlab)
+    
+    # MAP:
+    abline(v=MAP.deoptim[pp], col="red")
+    
+    # marginal mode
+    thisposterior_x <- thisposterior_scaled[which.max(thisposterior_scaled[,2]),1]
+    abline(v=thisposterior_x,col="blue")
+    
+    # right axis
+    axis(side = 4, 
+         at=seq(from=min(thisposterior_scaled[,2]), to=max(thisposterior_scaled[,2]),length.out=5),
+         col="orange",lwd=3, col.axis="orange")
+    # mtext("log posterior", side = 4, line = 3, cex = 1.5)
+    
+    # priors:
+    x = seq(from=bound.lower[pp],to=bound.upper[pp],length.out=1000)
+    lines(x,scale*dunif(x, min = bound.lower[pp], max = bound.upper[pp])+log_min,
+          col="black", lwd=1, lty=2)
+    
+    # log post
+    lines(x=this.changing.parameter$V1,y=this.logpost$V1)
+    
+    # # legend
+    # legend(x="topright",
+    #        legend=c("Log posterior",
+    #                 "Scaled marginal posterior",
+    #                 "MAP estimate",
+    #                 "Prior"),
+    #        col=c("black","orange","red","black"), lwd=c(1,3,1,1),
+    #        lty=c(1,1,1,2))
+  
   }
   
   for (pp in sequence5){
-    plot(x=my.changing.parameter[,pp],y=my.logpost[,pp],xlab=parnames[pp],ylab="log post")
+    
+    # prune posterior
+    thisposterior = matrix(NA, nrow = length(chain_densities[[pp]]$x), ncol = 2)
+    thisposterior[,1] = chain_densities[[pp]]$x
+    thisposterior[,2] = chain_densities[[pp]]$y
+    
+    thisposterior_keep = as.data.frame(thisposterior)
+    
+    # prune posterior to 
+    for (i in 1:length(chain_densities[[pp]]$x)){
+      if (thisposterior[i,1]<min(my.changing.parameter[,pp]) | thisposterior[i,1]>max(my.changing.parameter[,pp])) {
+        thisposterior_keep[i,2]=NA
+      } else {
+        thisposterior_keep[i,2]=thisposterior[i,2]
+      }
+    }
+    
+    thisposterior_keep <- thisposterior_keep[complete.cases(thisposterior_keep), ]
+    
+    #find matching length of logposts     
+    this.logpost <- as.data.frame(matrix(NA, nrow = length(thisposterior_keep$V1), ncol = 1))
+    this.changing.parameter <- this.logpost
+    
+    this.parameter <- MAP.deoptim
+    par.range <- seq(from=bound.lower[pp], to=bound.upper[pp], length = length(thisposterior_keep$V1))
+    
+    if (pp==7)(
+      par.range <- seq(from=0, to= 0.005, length=length(thisposterior_keep$V1))
+    )
+    
+    for (i in 1:length(par.range)){
+      this.parameter[pp] <- par.range[i]
+      this.changing.parameter[i,1] <- this.parameter[pp]
+      this.logpost[i,1] <- log.post(parameters.in = this.parameter,
+                                    
+                                    # BRICK:
+                                    parnames.in=parnames           , forcing.in=forcing         , l.project=l.project           ,
+                                    slope.Ta2Tg.in=slope.Ta2Tg     , intercept.Ta2Tg.in=intercept.Ta2Tg                         ,
+                                    ind.norm.data=ind.norm.data    , ind.norm.sl=ind.norm       , mod.time=mod.time             ,
+                                    oidx = oidx.all                , midx = midx.all            , obs=obs.all                   ,
+                                    obs.err = obs.err.all          , trends.te = trends.te      , bound.lower.in=bound.lower    ,
+                                    bound.upper.in=bound.upper     , shape.in=shape.invtau      , scale.in=scale.invtau         ,
+                                    luse.brick=luse.brick          , i0=i0                      , l.aisfastdy=l.aisfastdy       ,
+                                    
+                                    # DAIS:
+                                    obs.in=obs.targets             , obs.err.in=obs.err.dais    , obs.step.in=obs.years         ,
+                                    trends.ais.in=trends.ais       , trends.err.in=trends.err   , ind.trends.in=ind.trends      ,
+                                    ind.norm.in=ind.relative       , alpha.var=alpha.var        , beta.var=beta.var             ,
+                                    #slope.Ta2Tg.in=slope.Ta2Tg , intercept.Ta2Tg.in=intercept.Ta2Tg , # already accounted for above 
+                                    Tg.in=Tg.recon                 ,
+                                    shape.lambda=shape.lambda      , rate.lambda=rate.lambda    , shape.Tcrit=shape.Tcrit       ,
+                                    rate.Tcrit=rate.Tcrit          , 
+                                    #l.aisfastdy=l.aisfastdy, # already accounted for above 
+                                    #Ta.in=Ta  , Toc.in=Toc , # Tony left this commented
+                                    SL.in=SL                       , dSL.in=dSL                 , 
+                                    
+                                    # Configure
+                                    experts=experts                , alldata=alldata)
+    }
+    
+    # Scale posterior:
+    log_max = max(this.logpost$V1)
+    log_min = min(this.logpost$V1[which(this.logpost$V1 > 0)])
+    span = log_max - log_min
+    scale = span/(max(thisposterior_keep$V2)-min(thisposterior_keep$V2))
+    
+    thisposterior_scaled <- thisposterior_keep
+    thisposterior_scaled[,2] <- scale*thisposterior_scaled[,2]+log_min
+    names(thisposterior_scaled) <- c("x","y")
+    
+    # BEGIN PLOT!!!
+    plot(x=thisposterior_scaled$x,y=thisposterior_scaled$y, type="l", lwd=3, 
+         col="orange",xlab=parnames[pp],ylab="log post",
+         cex.lab=cexlab)
+    
+    # MAP:
+    abline(v=MAP.deoptim[pp], col="red")
+    
+    # marginal mode
+    thisposterior_x <- thisposterior_scaled[which.max(thisposterior_scaled[,2]),1]
+    abline(v=thisposterior_x,col="blue")
+    
+    # right axis
+    axis(side = 4, 
+         at=seq(from=min(thisposterior_scaled[,2]), to=max(thisposterior_scaled[,2]),length.out=5),
+         col="orange",lwd=3, col.axis="orange")
+    # mtext("log posterior", side = 4, line = 3, cex = 1.5)
+    
+    # priors:
+    x = seq(from=bound.lower[pp],to=bound.upper[pp],length.out=1000)
+    lines(x,scale*dunif(x, min = bound.lower[pp], max = bound.upper[pp])+log_min,
+          col="black", lwd=1, lty=2)
+    
+    # log post
+    lines(x=this.changing.parameter$V1,y=this.logpost$V1)
+    
+    # # legend
+    # legend(x="topright",
+    #        legend=c("Log posterior",
+    #                 "Scaled marginal posterior",
+    #                 "MAP estimate",
+    #                 "Prior"),
+    #        col=c("black","orange","red","black"), lwd=c(1,3,1,1),
+    #        lty=c(1,1,1,2))
+    
   }
+  
+  
   dev.off()
 } # End of if true
 
@@ -401,6 +941,6 @@ if(TRUE){
 t.end <- proc.time()
 time.elapsed <- t.end - t.beg
 save.image(file=filename.saveprogress)
-print("line 405")
+print("line 882")
 print(time.elapsed)
 print("TEDDY IS A CUTE PUPPER")
