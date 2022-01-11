@@ -319,7 +319,9 @@ log.lik.BRICK = function(
                           trends.te,
                           luse.brick,
                           i0,
-                          l.aisfastdy=TRUE
+                          l.aisfastdy=TRUE,
+                          
+                          brick.out
   
 ){
   
