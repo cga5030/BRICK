@@ -55,52 +55,9 @@ if(TRUE){
 
 ##==============================================================================
 ## (log of the) prior probability
-log.pri.BRICK = function(parameters.in , 
-                   parnames.in, 
-                   bound.lower.in, 
-                   bound.upper.in,
-                   shape.in, 
-                   scale.in,
-                   alpha.var.in,
-                   beta.var.in,
-                   shape.lambda=NULL,
-                   rate.lambda=NULL,
-                   shape.Tcrit=NULL,
-                   rate.Tcrit=NULL,
-                   l.aisfastdy=l.aisfastdy
-                   )
+log.pri.BRICK = function(parameters.in , parnames.in, bound.lower.in, bound.upper.in,
+                   shape.in, scale.in )
 {
-  
-  if(l.aisfastdy) {
-    ind.lambda = match("lambda",parnames.in)
-    lambda =parameters.in[match("lambda",parnames.in)]
-    Tcrit =parameters.in[match("Tcrit",parnames.in)]
-    ind.var = match("var.dais",parnames.in)
-    var.dais =parameters.in[ind.var]
-    # var.dais has inverse gamma prior, so there is a lower bound at 0 but no
-    # upper bound
-    if(fd.priors=='uniform') {
-      in.range = all(parameters.in[1:(ind.var-1)] < bound.upper.in[1:(ind.var-1)]) &
-        all(parameters.in > bound.lower.in)
-    }
-    if(fd.priors=='gamma') {
-      in.range = all(parameters.in[1:(ind.lambda-1)] < bound.upper.in[1:(ind.lambda-1)]) &
-        all(parameters.in[1:(ind.lambda-1)] > bound.lower.in[1:(ind.lambda-1)]) &
-        all(parameters.in[ind.var] > bound.lower.in[ind.var]) &
-        all(parameters.in[ind.lambda] > 0) &
-        all(parameters.in[ind.lambda+1] < 0)
-    }
-    var_pri = 0
-    lambda_pri = 0
-    Tcrit_pri = 0
-    if(in.range) {
-      var_pri = (-alpha.var.in - 1)*log(var.dais) + (-beta.var.in/var.dais)
-      if(fd.priors=='gamma') {
-        lambda_pri = dgamma(x=lambda, shape=shape.lambda, rate=rate.lambda, log=TRUE)
-        Tcrit_pri = dgamma(x=-Tcrit, shape=shape.Tcrit, rate=rate.Tcrit, log=TRUE)
-      }
-      lpri.dais=0 + var_pri + lambda_pri + Tcrit_pri
-    } 
   
   # Pluck off the model and statistical parameters (only ones without uniform prior)
   ind.S      = match("S",parnames.in)
@@ -116,12 +73,10 @@ log.pri.BRICK = function(parameters.in ,
     #    lpri.S = log(dcauchy(parameters.in[ind.S],location=3,scale=2) / 	# S has truncated Cauchy(3,2) prior
     #					(pcauchy(bound.upper[ind.S],location=3,scale=2)-pcauchy(bound.lower[ind.S],location=3,scale=2)))
     if(!is.na(ind.invtau)) {lpri.invtau = dgamma( parameters.in[ind.invtau], shape=shape.in, scale=scale.in, log=TRUE)}
-    lpri = lpri.uni + lpri.S + lpri.invtau + lpri.dais
+    lpri = lpri.uni + lpri.S + lpri.invtau
     #    lpri = lpri.uni
   } else {
     lpri = -Inf
-  }
-  
   }
   
   return(lpri)
@@ -197,9 +152,9 @@ log.pri.DAIS = function( parameters.in,
 ## (log of the) density of expert assessment for log-normal shape 
 
 log_exp_lognorm <- function(model_out){
-  # expert distribution - imputed from Bamber et al. 2019
-  meanlog = -1.599407
-  sdlog = 1.137442
+  # expert distribution - imputed from Bamber et al. 2019, Table 2 "2100 H"
+  meanlog = 0.147
+  sdlog = 0.444
   
   # get BRICK outputs for 2100
   slr_2100 <- model_out$slr.out[251]
@@ -211,22 +166,22 @@ log_exp_lognorm <- function(model_out){
 ##==============================================================================
 ## Log-likelihood
 log.lik.DAISpaleo = function( parameters.in,
-                    parnames.in,
-                    obs.in,
-                    obs.err.in,
-                    obs.step.in,
-                    ind.norm.in,
-                    SL.in,
-                    dSL.in,
-                    trends.ais.in,
-                    trends.err.in,
-                    ind.trends.in,
-                    slope.Ta2Tg.in=1,
-                    intercept.Ta2Tg.in=0,
-                    l.aisfastdy=TRUE,
-                    Tg.in=NULL,
-                    Ta.in=NULL,
-                    Toc.in=NULL
+                              parnames.in,
+                              obs.in,
+                              obs.err.in,
+                              obs.step.in,
+                              ind.norm.in,
+                              SL.in,
+                              dSL.in,
+                              trends.ais.in,
+                              trends.err.in,
+                              ind.trends.in,
+                              slope.Ta2Tg.in=1,
+                              intercept.Ta2Tg.in=0,
+                              l.aisfastdy=TRUE,
+                              Tg.in=NULL,
+                              Ta.in=NULL,
+                              Toc.in=NULL
 )
 {
   
@@ -341,39 +296,31 @@ log.lik.DAISpaleo = function( parameters.in,
 ##==============================================================================
 ## rest of the statistical model
 ##==============================================================================
-log.lik.BRICK = function( parameters.in,
-                    parnames.in,
-                    forcing.in,
-                    l.project=FALSE,
-                    rho.simple.in=NULL,
-                    sigma.simple.in=NULL,
-                    slope.Ta2Tg.in=1,
-                    intercept.Ta2Tg.in=0,
-                    mod.time,
-                    ind.norm.data,
-                    ind.norm.sl,
-                    midx,
-                    oidx,
-                    obs,
-                    obs.err,
-                    trends.te,
-                    luse.brick,
-                    i0,
-                    l.aisfastdy=TRUE,
-                    
-                    obs.in,
-                    obs.err.in,
-                    obs.step.in,
-                    ind.norm.in,
-                    SL.in,
-                    dSL.in,
-                    trends.ais.in,
-                    trends.err.in,
-                    ind.trends.in,
-                    Tg.in=NULL,
-                    Ta.in=NULL,
-                    Toc.in=NULL,
-                    brick.out
+log.lik.BRICK = function( 
+                          parameters.in,
+                          parnames.in,
+                          forcing.in,
+                          bound.lower.in,
+                          bound.upper.in,
+                          l.project=FALSE,
+                          rho.simple.in=NULL,
+                          sigma.simple.in=NULL,
+                          shape.in,
+                          scale.in,
+                          slope.Ta2Tg.in=1,
+                          intercept.Ta2Tg.in=0,
+                          mod.time,
+                          ind.norm.data,
+                          ind.norm.sl,
+                          midx,
+                          oidx,
+                          obs,
+                          obs.err,
+                          trends.te,
+                          luse.brick,
+                          i0,
+                          l.aisfastdy=TRUE
+  
 ){
   
   ## Calculate contribution from DOECLIM temperature
@@ -509,7 +456,7 @@ log.lik.BRICK = function( parameters.in,
         (brick.out$dais.out$Vais[midx$sl]-mean(brick.out$dais.out$Vais[midx$sl[1:20]]))
       
       if(all(resid.sl.ais[20:length(resid.sl.ais)]>0)){
-        lik.dais = 0
+        llik.dais = 0
       } else {
         llik.dais = -Inf
       }
@@ -580,23 +527,21 @@ log.post = function(  parameters.in,
                       alldata
 ){
   
-  lpri.BRICK = log.pri.BRICK( parameters.in=parameters.in,
-                  parnames.in=parnames.in,
-                  bound.lower.in=bound.lower.in,
-                  bound.upper.in=bound.upper.in,
-                  shape.in=shape.in,
-                  scale.in=scale.in,
-                  alpha.var.in=alpha.var       , beta.var.in=beta.var         ,
-                  shape.lambda=shape.lambda    , rate.lambda=rate.lambda      ,
-                  shape.Tcrit=shape.Tcrit      , rate.Tcrit=rate.Tcrit        ,
-                  l.aisfastdy=l.aisfastdy)
+  # saveRDS(parameters.in, file="parameters_in.RDS")
   
-  lpri.DAIS = log.pri.DAIS(parameters.in           , parnames.in=parnames.in      ,
-                      alpha.var.in=alpha.var       , beta.var.in=beta.var         ,
-                      bound.lower.in=bound.lower.in, bound.upper.in=bound.upper.in,
-                      shape.lambda=shape.lambda    , rate.lambda=rate.lambda      ,
-                      shape.Tcrit=shape.Tcrit      , rate.Tcrit=rate.Tcrit        ,
-                      l.aisfastdy=l.aisfastdy                                      )
+  lpri.BRICK = log.pri.BRICK( parameters.in=parameters.in,
+                              parnames.in=parnames.in,
+                              bound.lower.in=bound.lower.in,
+                              bound.upper.in=bound.upper.in,
+                              shape.in=shape.in,
+                              scale.in=scale.in)
+  
+  lpri.DAIS = log.pri.DAIS(parameters.in                , parnames.in=parnames.in      ,
+                           alpha.var.in=alpha.var       , beta.var.in=beta.var         ,
+                           bound.lower.in=bound.lower.in, bound.upper.in=bound.upper.in,
+                           shape.lambda=shape.lambda    , rate.lambda=rate.lambda      ,
+                           shape.Tcrit=shape.Tcrit      , rate.Tcrit=rate.Tcrit        ,
+                           l.aisfastdy=l.aisfastdy                                      )
   
   lpri = lpri.BRICK + lpri.DAIS
   
@@ -625,50 +570,42 @@ log.post = function(  parameters.in,
       
       if (alldata){
       
-        llik.BRICK = log.lik.BRICK( parameters.in=parameters.in,
-                                 parnames.in=parnames.in,
-                                 forcing.in=forcing.in,
-                                 l.project=l.project,
-                                 rho.simple.in=rho.simple.in,
-                                 sigma.simple.in=sigma.simple.in,
-                                 slope.Ta2Tg.in=slope.Ta2Tg,
-                                 intercept.Ta2Tg.in=intercept.Ta2Tg.in,
-                                 mod.time=mod.time,
-                                 ind.norm.data=ind.norm.data,
-                                 ind.norm.sl=ind.norm.sl,
-                                 midx=midx,
-                                 oidx=oidx,
-                                 obs=obs,
-                                 obs.err=obs.err,
-                                 trends.te=trends.te,
-                                 luse.brick=luse.brick,
-                                 i0=i0,
-                                 l.aisfastdy=l.aisfastdy,
-                                 
-                                 obs.in=obs.in,
-                                 obs.err.in=obs.err.in,
-                                 obs.step.in=obs.step.in,
-                                 ind.norm.in=ind.norm.in,
-                                 SL.in=SL.in,
-                                 dSL.in=dSL.in,
-                                 trends.ais.in=trends.ais.in,
-                                 trends.err.in=trends.err.in,
-                                 ind.trends.in=ind.trends.in,
-                                 Tg.in=Tg.in,
-                                 # Ta.in=Ta.in,
-                                 # Toc.in=NULL
-                                 brick.out=brick.out
+        llik.BRICK = log.lik.BRICK( 
+          
+                                parameters.in=parameters.in,
+                                parnames.in=parnames.in,
+                                forcing.in=forcing.in,
+                                l.project=l.project,
+                                rho.simple.in=rho.simple.in,
+                                sigma.simple.in=sigma.simple.in,
+                                slope.Ta2Tg.in=slope.Ta2Tg.in,
+                                intercept.Ta2Tg.in=intercept.Ta2Tg.in,
+                                mod.time=mod.time,
+                                ind.norm.data=ind.norm.data,
+                                ind.norm.sl=ind.norm.sl,
+                                midx=midx,
+                                oidx=oidx,
+                                obs=obs,
+                                obs.err=obs.err,
+                                trends.te=trends.te,
+                                luse.brick=luse.brick,
+                                i0=i0,
+                                l.aisfastdy=l.aisfastdy,
+          
+                                brick.out=brick.out
                                  )  
         
-        llik.DAISpaleo =         log.lik.DAISpaleo( parameters.in=parameters.in  , parnames.in=parnames.in ,
-                                 obs.in=obs.in                , obs.err.in=obs.err.in   ,
-                                 obs.step.in=obs.step.in      , ind.trends.in=ind.trends.in ,
-                                 trends.ais.in=trends.ais.in  , trends.err.in = trends.err.in ,
-                                 slope.Ta2Tg.in=slope.Ta2Tg.in, intercept.Ta2Tg.in=intercept.Ta2Tg.in,
-                                 Tg.in=Tg.in                  , l.aisfastdy=l.aisfastdy,
-                                 # Ta.in=Ta.in                  , Toc.in=Toc.in     ,
-                                 SL.in=SL.in                  , dSL.in=dSL.in     ,
-                                 ind.norm.in=ind.norm.in )
+        llik.DAISpaleo =         log.lik.DAISpaleo( 
+          
+                                  parameters.in=parameters.in  , parnames.in=parnames.in ,
+                                  obs.in=obs.in                , obs.err.in=obs.err.in   ,
+                                  obs.step.in=obs.step.in      , ind.trends.in=ind.trends.in ,
+                                  trends.ais.in=trends.ais.in  , trends.err.in = trends.err.in ,
+                                  slope.Ta2Tg.in=slope.Ta2Tg.in, intercept.Ta2Tg.in=intercept.Ta2Tg.in,
+                                  Tg.in=Tg.in                  , l.aisfastdy=l.aisfastdy,
+                                  #Ta.in=Ta.in                  , Toc.in=Toc.in     ,
+                                  SL.in=SL.in                  , dSL.in=dSL.in     ,
+                                  ind.norm.in=ind.norm.in )
         
       lpost<-lpost+llik.BRICK+llik.DAISpaleo
           
@@ -769,6 +706,8 @@ neg.log.post = function(  parameters.in,
                         experts,
                         alldata
   )
+  
+  if (is.na(lp)){lp=-Inf}
   
   # return negative log posterior
   return(-1*lp)

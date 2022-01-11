@@ -1,27 +1,25 @@
-## TO DO: CREATE A SEPARATE OBS.ERR FOR EACH BRICK AND DAIS
-
 rm(list=ls())                        # Clear all previous variables
 
 ## Set up MCMC stuff here so that it can be automated for HPC
-nnode_mcmc000 <- 4
-niter_mcmc000 <- 2.5e6 # 1e6 for BRICK, 1e5 for DAIS
+nnode_mcmc000 <- 1
+niter_mcmc000 <- 5e6 # 2e7 for full inversion, 4e7 for expert-only inversion
 gamma_mcmc000 <- 0.51    # rate of adaptation (between 0.5 and 1, lower is faster adaptation)
 accept_mcmc000 <- 0.15  # changed to 0.15 to help the sampler explore the space more carefully
                         # from Tony's 0.234: "Optimal as # parameters->infinity (Gelman et al, 1996; Roberts et al, 1997)" (Wong et al., 2017)
-experts=FALSE # do you wish to invert expert assessment?
+experts=TRUE # do you wish to invert expert assessment?
 alldata=TRUE # do you wish to invert paleo and instrumental data?
 
 if(alldata){
   if(experts){
-  configure <- '_Complete_0614_2e7_' # configure for your run
+  configure <- '_Complete_0111_5e6_' # configure for your run
   }
   else{
-    configure <- '_Standard_0614_1e5_' # configure for your run
+    configure <- '_Standard_0714_2e7_' # configure for your run
   }
 } else{
-    configure <- '_Expert_0614_4e7_' # configure for your run
+    configure <- '_Expert_0111_1e7_' # configure for your run
   }
-
+print(configure)
 ## Show plots? (probably want FALSE on HPC, non-interactive)
 l.doplots <- FALSE
 
@@ -349,28 +347,28 @@ obs.years <- c(120000, 220000, 234000, 240002)
 ##TODO -- Also note that some of the SNEASY parameter bounds are infinite, which
 ##TODO -- causes problems in optimization.
 ##TODO
-
-source('../calibration/CARL_BRICK_DEoptim.R')
-# source('../calibration/BRICK_DEoptim.R')
-p0.deoptim=p0                          # initialize optimized initial parameters
-niter.deoptim= 100                      # number of iterations for DE optimization
-NP.deoptim=11*length(index.model)      # population size for DEoptim (do at least 10*[N parameters])
-F.deoptim=0.8                          # as suggested by Storn et al (2006)
-CR.deoptim=0.9                        # as suggested by Storn et al (2006)
-outDEoptim <- DEoptim(minimize_residuals_brick, bound.lower[index.model], bound.upper[index.model],
-                      DEoptim.control(NP=NP.deoptim,itermax=niter.deoptim,F=F.deoptim,CR=CR.deoptim,trace=FALSE),
-                      parnames.in=parnames[index.model], forcing.in=forcing        , l.project=l.project      ,
-                      slope.Ta2Tg.in=slope.Ta2Tg       , intercept.Ta2Tg.in=intercept.Ta2Tg,
-                      ind.norm.data=ind.norm.data      , ind.norm.sl=ind.norm      , mod.time=mod.time        ,
-                      tstep=tstep                      , oidx = oidx.all           , midx = midx.all          ,
-                      obs=obs.all                      , obs.err = obs.err.all     , trends.te = trends.te    ,
-                      luse.brick = luse.brick           , i0 = i0                   , l.aisfastdy = l.aisfastdy )
-p0.deoptim[index.model] = outDEoptim$optim$bestmem
-
-p0.start <- p0.deoptim
-
-# DAIS values from Ben Vega Westhoff
-if(TRUE){
+if(FALSE){ # pull starting parameters from a previous run; fix this later
+  source('../calibration/CARL_BRICK_DEoptim.R')
+  # source('../calibration/BRICK_DEoptim.R')
+  p0.deoptim=p0                          # initialize optimized initial parameters
+  niter.deoptim= 100                      # number of iterations for DE optimization
+  NP.deoptim=11*length(index.model)      # population size for DEoptim (do at least 10*[N parameters])
+  F.deoptim=0.8                          # as suggested by Storn et al (2006)
+  CR.deoptim=0.9                        # as suggested by Storn et al (2006)
+  outDEoptim <- DEoptim(minimize_residuals_brick, bound.lower[index.model], bound.upper[index.model],
+                        DEoptim.control(NP=NP.deoptim,itermax=niter.deoptim,F=F.deoptim,CR=CR.deoptim,trace=FALSE),
+                        parnames.in=parnames[index.model], forcing.in=forcing        , l.project=l.project      ,
+                        slope.Ta2Tg.in=slope.Ta2Tg       , intercept.Ta2Tg.in=intercept.Ta2Tg,
+                        ind.norm.data=ind.norm.data      , ind.norm.sl=ind.norm      , mod.time=mod.time        ,
+                        tstep=tstep                      , oidx = oidx.all           , midx = midx.all          ,
+                        obs=obs.all                      , obs.err = obs.err.all     , trends.te = trends.te    ,
+                        luse.brick = luse.brick           , i0 = i0                   , l.aisfastdy = l.aisfastdy )
+  p0.deoptim[index.model] = outDEoptim$optim$bestmem
+  
+  p0.start <- p0.deoptim
+}
+# DAIS values from Ben Vega Westhoff # NVM, fix this later
+if(FALSE){
 p0.start[14] = 0.268933326
 p0.start[15] = 0.013722995
 p0.start[16] = 3.431541681
@@ -388,6 +386,10 @@ p0.start[27] = 0.009839232
 p0.start[28] = -15.8764534
 p0.start[33] = 0.201209769
 }
+
+# for now pull starting values from a past calibration
+amcmc.out<-readRDS("CARL_calib_amcmc_out_Standard_0714_extend_to_4e7_18Dec2021.rds",)
+p0.start <- amcmc.out$samples[4e7,]
 
 ## Run the model and examine output at these parameter values
 brick.out = brick_model(
@@ -448,9 +450,6 @@ if(luse.te) {
   scale.invtau <- 0.00275
 }
 
-save.image(file=filename.saveprogress)
-
-
 ##==============================================================================
 ## Now set up the coupled model calibration
 ##  -- will need to whip up a coupled model likelihood function file
@@ -472,7 +471,8 @@ niter.mcmc <- niter_mcmc000       # number of iterations for MCMC
 nnode.mcmc <- nnode_mcmc000        # number of nodes for parallel MCMC
 accept.mcmc <- accept_mcmc000
 gamma.mcmc <- gamma_mcmc000
-stopadapt.mcmc <- round(niter.mcmc*0.1)# stop adapting after ?? iterations? (niter*1 => don't stop)
+stopadapt.mcmc <- 2e6 # from experience 
+                      # original: <- round(niter.mcmc*0.1) # stop adapting after ?? iterations? (niter*1 => don't stop)
 
 if(FALSE){ # manually step through likelihood for debugging
   if(TRUE){
@@ -526,7 +526,7 @@ if(nnode.mcmc == 1) {
                     
                     # BRICK:
                     parnames.in=parnames           , forcing.in=forcing         , l.project=l.project           ,
-                    slope.Ta2Tg.in=slope.Ta2Tg     , intercept.Ta2Tg.in=intercept.Ta2Tg                         ,
+                    slope.Ta2Tg.in=slope.Ta2Tg     , intercept.Ta2Tg.in=intercept.Ta2Tg,
                     ind.norm.data=ind.norm.data    , ind.norm.sl=ind.norm       , mod.time=mod.time             ,
                     oidx = oidx.all                , midx = midx.all            , obs=obs.all                   ,
                     obs.err = obs.err.all          , trends.te = trends.te      , bound.lower.in=bound.lower    ,
@@ -535,15 +535,13 @@ if(nnode.mcmc == 1) {
                     
                     # DAIS:
                     obs.in=obs.targets             , obs.err.in=obs.err.dais    , obs.step.in=obs.years         ,
-                    trends.ais.in=trends.ais       , trends.err.in=trends.err   , ind.trends.in=ind.trends      ,
-                    ind.norm.in=ind.relative       , alpha.var=alpha.var        , beta.var=beta.var             ,
-                    #slope.Ta2Tg.in=slope.Ta2Tg , intercept.Ta2Tg.in=intercept.Ta2Tg , # already accounted for above 
+                    trends.ais.in=trends.ais       , trends.err.in=trends.err   , ind.trends.in=ind.trends  ,
+                    ind.norm=ind.relative          , alpha.var=alpha.var        , beta.var=beta.var         ,
                     Tg.in=Tg.recon                 ,
-                    shape.lambda=shape.lambda      , rate.lambda=rate.lambda    , shape.Tcrit=shape.Tcrit       ,
+                    shape.lambda=shape.lambda      , rate.lambda=rate.lambda    , shape.Tcrit=shape.Tcrit   ,
                     rate.Tcrit=rate.Tcrit          , 
-                    #l.aisfastdy=l.aisfastdy, # already accounted for above 
-                    #Ta.in=Ta  , Toc.in=Toc , # Tony left this commented
-                    SL.in=SL                       , dSL.in=dSL                 , 
+                    #Ta.in=Ta  , Toc.in=Toc ,
+                    SL.in=SL  , dSL.in=dSL                 , 
                     
                     # Configure
                     experts=experts                , alldata=alldata
@@ -630,13 +628,6 @@ filename.RDS <- paste('CARL_calib_amcmc_out',configure,today,'.rds',sep='')
 saveRDS(amcmc.out,file <- filename.RDS)
 # saveRDS(time.elapsed,file <- "CALIB_amcmc_out_0415_1e7.rds")
 
-## Save workspace image - you do not want to re-simulate all those!
-save.image(file=filename.saveprogress)
-time.elapsed <- t.end - t.beg
-print("line 634")
-print(time.elapsed)
-
-
 ##############
 # Make some trace plots
 parameters.posterior <- chain1
@@ -689,24 +680,25 @@ if(TRUE){
 } # End of if true
 
 # Individual Trace Plots
-print("beginning individual trace plots")
-for (pp in 1:length(parnames)){
-  print(pp)
-  filename.individual = paste('../output_calibration/individual_plots/TraceIndividual',configure,pp,'.png',sep='')
-  png(filename=filename.individual, width=1920, height=1080, units ="px")
-  
-  plot(parameters.posterior[,pp], type="l", ylab=parnames[pp], xlab="Number of Runs", main="")
-  abline(v=stopadapt.mcmc,col="red",lwd=3)
-  
-  dev.off()
-} # End of if true
-
+if(FALSE){
+  print("beginning individual trace plots")
+  for (pp in 1:length(parnames)){
+    print(pp)
+    filename.individual = paste('../output_calibration/individual_plots/TraceIndividual',configure,pp,'.png',sep='')
+    png(filename=filename.individual, width=1920, height=1080, units ="px")
+    
+    plot(parameters.posterior[,pp], type="l", ylab=parnames[pp], xlab="Number of Runs", main="")
+    abline(v=stopadapt.mcmc,col="red",lwd=3)
+    
+    dev.off()
+  } 
+}
 
 ## Save workspace image
 t.end <- proc.time()
 time.elapsed <- t.end - t.beg
 save.image(file=filename.saveprogress)
-print("line 707")
+print("line 711")
 print(time.elapsed)
 print("TEDDY IS A CUTE PUPPER")
     
