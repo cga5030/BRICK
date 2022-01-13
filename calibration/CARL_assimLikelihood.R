@@ -54,7 +54,7 @@ if(TRUE){
 }
 
 ##==============================================================================
-## (log of the) prior probability
+## (log of the) prior probability for BRICK
 log.pri.BRICK = function(parameters.in , parnames.in, bound.lower.in, bound.upper.in,
                    shape.in, scale.in )
 {
@@ -83,7 +83,7 @@ log.pri.BRICK = function(parameters.in , parnames.in, bound.lower.in, bound.uppe
 }
 
 ##==============================================================================
-## Log-prior
+## Log-prior for DAIS
 log.pri.DAIS = function( parameters.in,
                     parnames.in,
                     alpha.var.in,
@@ -157,10 +157,12 @@ log_exp_lognorm <- function(model_out){
   sdlog = 0.444
   
   # get BRICK outputs for 2100
+  slr_2000 <- model_out$slr.out[151]
   slr_2100 <- model_out$slr.out[251]
+  test_slr <- slr_2100 - slr_2000
   
   # log-likelihood given expert assessment
-  dlnorm(slr_2100, meanlog = meanlog, sdlog=sdlog, log=TRUE)
+  dlnorm(test_slr, meanlog = meanlog, sdlog=sdlog, log=TRUE)
 }
 
 ##==============================================================================
