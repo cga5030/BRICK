@@ -3,49 +3,108 @@ graphics.off()
 
 t.beg <- proc.time()
 
-## Initial set-up
-# configure which pipeline you want to create figures for:
-# for hindcasts
-ais.paleo.05 <- readRDS(file="complete_0115_ais_paleo_05.rds")
-ais.paleo.50 <- readRDS(file="complete_0115_ais_paleo_50.rds")
-ais.paleo.95 <- readRDS(file="complete_0115_ais_paleo_95.rds")
-t.paleo <- readRDS(file="complete_0115_t_paleo.rds")
-t.hind <- readRDS(file="complete_0115_t_hind.rds")
+## Load pipeline files
+t.hind <- readRDS(file="priors_0118_t_hind.rds")
+t.proj <- readRDS(file="priors_0118_t_proj.rds")
+t.paleo <- readRDS(file="priors_0118_t_paleo.rds")
 
-gsic.hind <- readRDS(file="complete_0115_gsic_hind.rds")
-te.hind <- readRDS(file="complete_0115_te_hind.rds")
-gis.hind <- readRDS(file="complete_0115_gis_hind.rds")
-ais.hind <- readRDS(file="complete_0115_ais_hind.rds")
-temp.hind <- readRDS(file="complete_0115_temp_hind.rds")
-ocheat.hind <- readRDS(file="complete_0115_ocheat_hind.rds")
-gsl.hind <- readRDS(file="complete_0115_gsl_hind.rds")
+#####################################################################
+## Priors
+priors.ais.paleo.05 <- readRDS(file="priors_0118_ais_paleo_05.rds")
+priors.ais.paleo.50 <- readRDS(file="priors_0118_ais_paleo_50.rds")
+priors.ais.paleo.95 <- readRDS(file="priors_0118_ais_paleo_95.rds")
+
+priors.gsic.hind <- readRDS(file="priors_0118_gsic_hind.rds")
+priors.te.hind <- readRDS(file="priors_0118_te_hind.rds")
+priors.gis.hind <- readRDS(file="priors_0118_gis_hind.rds")
+priors.ais.hind <- readRDS(file="priors_0118_ais_hind.rds")
+priors.temp.hind <- readRDS(file="priors_0118_temp_hind.rds")
+priors.ocheat.hind <- readRDS(file="priors_0118_ocheat_hind.rds")
+priors.gsl.hind <- readRDS(file="priors_0118_gsl_hind.rds")
 
 # for projections
-slr.rcp26 <- readRDS(file="complete_0115_slr_rcp26.rds")
-te.rcp26 <- readRDS(file="complete_0115_te_rcp26.rds") 
-gis.rcp26 <- readRDS(file="complete_0115_gis_rcp26.rds")
-gsic.rcp26 <- readRDS(file="complete_0115_gsic_rcp26.rds")
-ais.rcp26 <- readRDS(file="complete_0115_ais_rcp26.rds")
-temp.rcp26 <- readRDS(file="complete_0115_temp_rcp26.rds")
-ocheat.rcp26 <- readRDS(file="complete_0115_ocheat_rcp26.rds")
-t.proj <- readRDS(file="complete_0115_t_proj.rds")
+priors.slr.rcp26 <- readRDS(file="priors_0118_slr_rcp26.rds")
+priors.te.rcp26 <- readRDS(file="priors_0118_te_rcp26.rds") 
+priors.gis.rcp26 <- readRDS(file="priors_0118_gis_rcp26.rds")
+priors.gsic.rcp26 <- readRDS(file="priors_0118_gsic_rcp26.rds")
+priors.ais.rcp26 <- readRDS(file="priors_0118_ais_rcp26.rds")
+priors.temp.rcp26 <- readRDS(file="priors_0118_temp_rcp26.rds")
+priors.ocheat.rcp26 <- readRDS(file="priors_0118_ocheat_rcp26.rds")
+#####################################################################
 
-# ## File name for the BRICK physical model output (netCDF4)
-# filename.brick.magicc = '../output_model/BRICK-model_physical_control_02Apr2017.nc'
-# filename.brick.simple = '../output_model/BRICK-model_physical_SIMPLE-GSIC_02Apr2017.nc'
-# filename.brick.gmsl   = '../output_model/BRICK-model_physical_R07_03Apr2017.nc'
-# 
-# ## File name for the Van Dantzig model output (netCDF4)
-# filename.vandantzig = '../output_model/VanDantzig_RCP85_control_02Apr2017.nc'
-# 
-# ## File name for the BRICK post-calibrated parameters (csv) (the BRICK output came from these guys)
-# filename.parameters.magicc  = '../output_calibration/BRICK-model_postcalibratedParameters_control_02Apr2017.nc'
-# filename.parameters.simple  = '../output_calibration/BRICK-model_postcalibratedParameters_SIMPLE-GSIC_02Apr2017.nc'
-# filename.parameters.gmsl    = '../output_calibration/BRICK-model_drawcalibratedParameters_R07_03Apr2017.nc'
-# 
-# ## Other files
-# filename.rho_simple_fixed = "../output_calibration/rho_simple_fixed_01Nov2016.csv"
-# filename.fingerprints = "../fingerprints/FINGERPRINTS_SLANGEN_Bakker.nc"
+#####################################################################
+## Experts
+experts.ais.paleo.05 <- readRDS(file="experts_0118_ais_paleo_05.rds")
+experts.ais.paleo.50 <- readRDS(file="experts_0118_ais_paleo_50.rds")
+experts.ais.paleo.95 <- readRDS(file="experts_0118_ais_paleo_95.rds")
+
+experts.gsic.hind <- readRDS(file="experts_0118_gsic_hind.rds")
+experts.te.hind <- readRDS(file="experts_0118_te_hind.rds")
+experts.gis.hind <- readRDS(file="experts_0118_gis_hind.rds")
+experts.ais.hind <- readRDS(file="experts_0118_ais_hind.rds")
+experts.temp.hind <- readRDS(file="experts_0118_temp_hind.rds")
+experts.ocheat.hind <- readRDS(file="experts_0118_ocheat_hind.rds")
+experts.gsl.hind <- readRDS(file="experts_0118_gsl_hind.rds")
+
+# for projections
+experts.slr.rcp26 <- readRDS(file="experts_0118_slr_rcp26.rds")
+experts.te.rcp26 <- readRDS(file="experts_0118_te_rcp26.rds") 
+experts.gis.rcp26 <- readRDS(file="experts_0118_gis_rcp26.rds")
+experts.gsic.rcp26 <- readRDS(file="experts_0118_gsic_rcp26.rds")
+experts.ais.rcp26 <- readRDS(file="experts_0118_ais_rcp26.rds")
+experts.temp.rcp26 <- readRDS(file="experts_0118_temp_rcp26.rds")
+experts.ocheat.rcp26 <- readRDS(file="experts_0118_ocheat_rcp26.rds")
+#####################################################################
+
+#####################################################################
+## Standard
+standard.ais.paleo.05 <- readRDS(file="standard_0115_ais_paleo_05.rds")
+standard.ais.paleo.50 <- readRDS(file="standard_0115_ais_paleo_50.rds")
+standard.ais.paleo.95 <- readRDS(file="standard_0115_ais_paleo_95.rds")
+
+standard.gsic.hind <- readRDS(file="standard_0115_gsic_hind.rds")
+standard.te.hind <- readRDS(file="standard_0115_te_hind.rds")
+standard.gis.hind <- readRDS(file="standard_0115_gis_hind.rds")
+standard.ais.hind <- readRDS(file="standard_0115_ais_hind.rds")
+standard.temp.hind <- readRDS(file="standard_0115_temp_hind.rds")
+standard.ocheat.hind <- readRDS(file="standard_0115_ocheat_hind.rds")
+standard.gsl.hind <- readRDS(file="standard_0115_gsl_hind.rds")
+
+# for projections
+standard.slr.rcp26 <- readRDS(file="standard_0115_slr_rcp26.rds")
+standard.te.rcp26 <- readRDS(file="standard_0115_te_rcp26.rds") 
+standard.gis.rcp26 <- readRDS(file="standard_0115_gis_rcp26.rds")
+standard.gsic.rcp26 <- readRDS(file="standard_0115_gsic_rcp26.rds")
+standard.ais.rcp26 <- readRDS(file="standard_0115_ais_rcp26.rds")
+standard.temp.rcp26 <- readRDS(file="standard_0115_temp_rcp26.rds")
+standard.ocheat.rcp26 <- readRDS(file="standard_0115_ocheat_rcp26.rds")
+#####################################################################
+
+#####################################################################
+## Complete
+complete.ais.paleo.05 <- readRDS(file="complete_0115_ais_paleo_05.rds")
+complete.ais.paleo.50 <- readRDS(file="complete_0115_ais_paleo_50.rds")
+complete.ais.paleo.95 <- readRDS(file="complete_0115_ais_paleo_95.rds")
+
+complete.gsic.hind <- readRDS(file="complete_0115_gsic_hind.rds")
+complete.te.hind <- readRDS(file="complete_0115_te_hind.rds")
+complete.gis.hind <- readRDS(file="complete_0115_gis_hind.rds")
+complete.ais.hind <- readRDS(file="complete_0115_ais_hind.rds")
+complete.temp.hind <- readRDS(file="complete_0115_temp_hind.rds")
+complete.ocheat.hind <- readRDS(file="complete_0115_ocheat_hind.rds")
+complete.gsl.hind <- readRDS(file="complete_0115_gsl_hind.rds")
+
+# for projections
+complete.slr.rcp26 <- readRDS(file="complete_0115_slr_rcp26.rds")
+complete.te.rcp26 <- readRDS(file="complete_0115_te_rcp26.rds") 
+complete.gis.rcp26 <- readRDS(file="complete_0115_gis_rcp26.rds")
+complete.gsic.rcp26 <- readRDS(file="complete_0115_gsic_rcp26.rds")
+complete.ais.rcp26 <- readRDS(file="complete_0115_ais_rcp26.rds")
+complete.temp.rcp26 <- readRDS(file="complete_0115_temp_rcp26.rds")
+complete.ocheat.rcp26 <- readRDS(file="complete_0115_ocheat_rcp26.rds")
+#####################################################################
+
+
 
 ## Other useful scripts
 source('../Useful/colorblindPalette.R') # Get nice plotting colors: mycol array
@@ -64,6 +123,7 @@ colobs <- 11
 
 ## Where would you like to save the plots?
 plotdir <- '../plots/'
+# main_path=getwd()
 
 ##==============================================================================
 logl.ar1 = function(r,sigma1,rho1,eps1=0) # default obs error is 0
@@ -87,55 +147,75 @@ logl.ar1 = function(r,sigma1,rho1,eps1=0) # default obs error is 0
 ## Supplemental Figure
 ## -- Hindcast, model vs observational data
 
-# ncdata <- nc_open(filename.brick.magicc)
-# t.hind      = ncvar_get(ncdata, 'time_hind')
-# gsl.hind    = ncvar_get(ncdata, 'GlobalSeaLevel_hind')
-# temp.hind   = ncvar_get(ncdata, 'temp_hind')
-# ocheat.hind = ncvar_get(ncdata, 'ocheat_hind')
-# gis.hind    = ncvar_get(ncdata, 'GIS_hind')
-# te.hind     = ncvar_get(ncdata, 'TE_hind')
-# gsic.hind   = ncvar_get(ncdata, 'GSIC_hind')
-# t.paleo     = ncvar_get(ncdata, 'time_paleo_avg')
-# ais.paleo.05= ncvar_get(ncdata, 'AIS_paleo_avg_q05')
-# ais.paleo.50= ncvar_get(ncdata, 'AIS_paleo_avg_q50')
-# ais.paleo.95= ncvar_get(ncdata, 'AIS_paleo_avg_q95')
-# nc_close(ncdata)
-
-
-# ais.paleo.05 <- dais.paleo.05
-# ais.paleo.50 <- dais.paleo.50
-# ais.paleo.95 <- dais.paleo.95
-
-if(FALSE) # if loading a local environment
-{
-
-  load("test_process_environment.RData")  
-    
-  ais.paleo.05 <- dais.paleo.05.avg
-  ais.paleo.50 <- dais.paleo.50.avg
-  ais.paleo.95 <- dais.paleo.95.avg
-  
-  t.paleo <- date.avg
-}
-
 ## Initialize arrays for the output
-slr.05 = rep(NA,length(t.hind));		slr.50 = rep(NA,length(t.hind));		slr.95 = rep(NA,length(t.hind))
-gsic.05 = rep(NA,length(t.hind));		gsic.50 = rep(NA,length(t.hind));		gsic.95 = rep(NA,length(t.hind))
-gis.05 = rep(NA,length(t.hind));		gis.50 = rep(NA,length(t.hind));		gis.95 = rep(NA,length(t.hind))
-te.05 = rep(NA,length(t.hind));			te.50 = rep(NA,length(t.hind));			te.95 = rep(NA,length(t.hind))
-temp.05 = rep(NA,length(t.hind));		temp.50 = rep(NA,length(t.hind));		temp.95 = rep(NA,length(t.hind))
-ocheat.05 = rep(NA,length(t.hind)); ocheat.50 = rep(NA,length(t.hind));	ocheat.95 = rep(NA,length(t.hind))
+# priors
+priors.slr.05 = rep(NA,length(t.hind));		  priors.slr.50 = rep(NA,length(t.hind));	  	priors.slr.95 = rep(NA,length(t.hind))
+priors.gsic.05 = rep(NA,length(t.hind));		priors.gsic.50 = rep(NA,length(t.hind));		priors.gsic.95 = rep(NA,length(t.hind))
+priors.gis.05 = rep(NA,length(t.hind));		  priors.gis.50 = rep(NA,length(t.hind));		  priors.gis.95 = rep(NA,length(t.hind))
+priors.te.05 = rep(NA,length(t.hind));			priors.te.50 = rep(NA,length(t.hind));			priors.te.95 = rep(NA,length(t.hind))
+priors.temp.05 = rep(NA,length(t.hind));		priors.temp.50 = rep(NA,length(t.hind));		priors.temp.95 = rep(NA,length(t.hind))
+priors.ocheat.05 = rep(NA,length(t.hind));  priors.ocheat.50 = rep(NA,length(t.hind));	priors.ocheat.95 = rep(NA,length(t.hind))
+
+# experts
+experts.slr.05 = rep(NA,length(t.hind));		experts.slr.50 = rep(NA,length(t.hind));	  experts.slr.95 = rep(NA,length(t.hind))
+experts.gsic.05 = rep(NA,length(t.hind));		experts.gsic.50 = rep(NA,length(t.hind));		experts.gsic.95 = rep(NA,length(t.hind))
+experts.gis.05 = rep(NA,length(t.hind));		experts.gis.50 = rep(NA,length(t.hind));		experts.gis.95 = rep(NA,length(t.hind))
+experts.te.05 = rep(NA,length(t.hind));			experts.te.50 = rep(NA,length(t.hind));			experts.te.95 = rep(NA,length(t.hind))
+experts.temp.05 = rep(NA,length(t.hind));		experts.temp.50 = rep(NA,length(t.hind));		experts.temp.95 = rep(NA,length(t.hind))
+experts.ocheat.05 = rep(NA,length(t.hind)); experts.ocheat.50 = rep(NA,length(t.hind));	experts.ocheat.95 = rep(NA,length(t.hind))
+
+# standard
+standard.slr.05 = rep(NA,length(t.hind));		  standard.slr.50 = rep(NA,length(t.hind));	  	standard.slr.95 = rep(NA,length(t.hind))
+standard.gsic.05 = rep(NA,length(t.hind));		standard.gsic.50 = rep(NA,length(t.hind));		standard.gsic.95 = rep(NA,length(t.hind))
+standard.gis.05 = rep(NA,length(t.hind));		  standard.gis.50 = rep(NA,length(t.hind));		  standard.gis.95 = rep(NA,length(t.hind))
+standard.te.05 = rep(NA,length(t.hind));			standard.te.50 = rep(NA,length(t.hind));			standard.te.95 = rep(NA,length(t.hind))
+standard.temp.05 = rep(NA,length(t.hind));		standard.temp.50 = rep(NA,length(t.hind));		standard.temp.95 = rep(NA,length(t.hind))
+standard.ocheat.05 = rep(NA,length(t.hind));  standard.ocheat.50 = rep(NA,length(t.hind));	standard.ocheat.95 = rep(NA,length(t.hind))
+
+# complete
+complete.slr.05 = rep(NA,length(t.hind));		  complete.slr.50 = rep(NA,length(t.hind));	  	complete.slr.95 = rep(NA,length(t.hind))
+complete.gsic.05 = rep(NA,length(t.hind));		complete.gsic.50 = rep(NA,length(t.hind));		complete.gsic.95 = rep(NA,length(t.hind))
+complete.gis.05 = rep(NA,length(t.hind));		  complete.gis.50 = rep(NA,length(t.hind));		  complete.gis.95 = rep(NA,length(t.hind))
+complete.te.05 = rep(NA,length(t.hind));			complete.te.50 = rep(NA,length(t.hind));			complete.te.95 = rep(NA,length(t.hind))
+complete.temp.05 = rep(NA,length(t.hind));		complete.temp.50 = rep(NA,length(t.hind));		complete.temp.95 = rep(NA,length(t.hind))
+complete.ocheat.05 = rep(NA,length(t.hind));  complete.ocheat.50 = rep(NA,length(t.hind));	complete.ocheat.95 = rep(NA,length(t.hind))
 
 source('../Useful/MultipleOutput.R') # defines the ":=" operator
 
 ## Actually tally up the data
 for (t in 1:length(t.hind)){
-  c(slr.05[t], slr.50[t], slr.95[t])					:= quantile(gsl.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
-  c(gsic.05[t], gsic.50[t], gsic.95[t])				:= quantile(gsic.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
-  c(gis.05[t], gis.50[t], gis.95[t])					:= quantile(gis.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
-  c(te.05[t], te.50[t], te.95[t])							:= quantile(te.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
-  c(temp.05[t], temp.50[t], temp.95[t])				:= quantile(temp.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
-  c(ocheat.05[t], ocheat.50[t], ocheat.95[t])	:= quantile(ocheat.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  # priors  
+  c(priors.slr.05[t],    priors.slr.50[t],    priors.slr.95[t])				:= quantile(priors.gsl.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(priors.gsic.05[t],   priors.gsic.50[t],   priors.gsic.95[t])			:= quantile(priors.gsic.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(priors.gis.05[t],    priors.gis.50[t],    priors.gis.95[t])				:= quantile(priors.gis.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(priors.te.05[t],     priors.te.50[t],     priors.te.95[t])				:= quantile(priors.te.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(priors.temp.05[t],   priors.temp.50[t],   priors.temp.95[t])			:= quantile(priors.temp.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(priors.ocheat.05[t], priors.ocheat.50[t], priors.ocheat.95[t])	  := quantile(priors.ocheat.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  
+  # experts 
+  c(experts.slr.05[t],    experts.slr.50[t],    experts.slr.95[t])		:= quantile(experts.gsl.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(experts.gsic.05[t],   experts.gsic.50[t],   experts.gsic.95[t])		:= quantile(experts.gsic.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(experts.gis.05[t],    experts.gis.50[t],    experts.gis.95[t])		:= quantile(experts.gis.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(experts.te.05[t],     experts.te.50[t],     experts.te.95[t])			:= quantile(experts.te.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(experts.temp.05[t],   experts.temp.50[t],   experts.temp.95[t])		:= quantile(experts.temp.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(experts.ocheat.05[t], experts.ocheat.50[t], experts.ocheat.95[t])	:= quantile(experts.ocheat.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  
+  # standard  
+  c(standard.slr.05[t],    standard.slr.50[t], standard.slr.95[t])				:= quantile(standard.gsl.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(standard.gsic.05[t],   standard.gsic.50[t], standard.gsic.95[t])			:= quantile(standard.gsic.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(standard.gis.05[t],    standard.gis.50[t], standard.gis.95[t])				:= quantile(standard.gis.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(standard.te.05[t],     standard.te.50[t], standard.te.95[t])					:= quantile(standard.te.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(standard.temp.05[t],   standard.temp.50[t], standard.temp.95[t])			:= quantile(standard.temp.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(standard.ocheat.05[t], standard.ocheat.50[t], standard.ocheat.95[t])	:= quantile(standard.ocheat.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  
+  # complete  
+  c(complete.slr.05[t],    complete.slr.50[t], complete.slr.95[t])				:= quantile(complete.gsl.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(complete.gsic.05[t],   complete.gsic.50[t], complete.gsic.95[t])			:= quantile(complete.gsic.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(complete.gis.05[t],    complete.gis.50[t], complete.gis.95[t])				:= quantile(complete.gis.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(complete.te.05[t],     complete.te.50[t], complete.te.95[t])					:= quantile(complete.te.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(complete.temp.05[t],   complete.temp.50[t], complete.temp.95[t])			:= quantile(complete.temp.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(complete.ocheat.05[t], complete.ocheat.50[t], complete.ocheat.95[t])	:= quantile(complete.ocheat.hind[t,], c(0.05,.50,.95), na.rm=TRUE)
+  
 }
 
 begyear = t.hind[1]
@@ -254,9 +334,10 @@ obs.years <- c(120000, 220000, 234000, 240002)
 ##
 
 # pdf(paste(plotdir,'hindcasts_with_noise_and_normalization.pdf',sep=''),width=7,height=6,colormodel='cmyk')
-png(paste(plotdir,'complete_hindcasts.png',sep=''), width=958, height=1080, units ="px")
 
-if(TRUE){
+# png(paste(plotdir,'standard_hindcasts.png',sep=''), width=958, height=1080, units ="px")
+
+if(FALSE){
   n.sig = 2         # how many sigma to plot around the obs?
   # layout(cbind(c(1,4,7),c(2,5,7),c(3,6,7)))
   layout(cbind(c(1,3,5,6),c(2,4,5,6)))
@@ -267,12 +348,12 @@ if(TRUE){
   
   if(plotall){
     # >>> SURFACE TEMPERATURE <<<
-    plot(mod.time[midx.temp], temp.50[midx.temp], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
+    plot(mod.time[midx.temp], standard.temp.50[midx.temp], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
          ylab='', xlim=c(1850,2016), ylim=c(-.3,1.5), cex.axis=1.2);
     mtext(side=1, text='Year', line=2.3, cex=.9);
     mtext(side=2, text='Surface temperature\n[deg C]', line=2.3, cex=.9);
     # mtext(side=3, text=expression(bold(' a')), line=.25, cex=.9, adj=0);
-    polygon(c(mod.time[midx.temp],rev(mod.time[midx.temp])), c(temp.95,rev(temp.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+    polygon(c(mod.time[midx.temp],rev(mod.time[midx.temp])), c(standard.temp.95,rev(standard.temp.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
     lines(obs.temp.time[oidx.temp], obs.temp.norm[oidx.temp], type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
     lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
     polygon(c(obs.temp.time[oidx.temp],rev(obs.temp.time[oidx.temp])),
@@ -282,57 +363,67 @@ if(TRUE){
     #       col=c(rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]),rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3])), lwd=2, bty='n', cex=1.2)
     
     # >>> OCEAN HEAT <<<
-    itmp=midx.ocheat[1]:nrow(ocheat.hind)
-    plot(mod.time[itmp], ocheat.50[itmp], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
+    itmp=midx.ocheat[1]:nrow(standard.ocheat.hind)
+    plot(mod.time[itmp], standard.ocheat.50[itmp], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
          ylab='', xlim=c(1950,2016), ylim=c(-50,50), cex.lab=1.2, cex.axis=1.2);
     mtext(side=1, text='Year', line=2.3, cex=.9);
     mtext(side=2, text='Ocean heat uptake\n[10^22 J]', line=2.3, cex=.9);
     # mtext(side=3, text=expression(bold(' b')), line=.25, cex=.9, adj=0);
-    polygon(c(mod.time[itmp],rev(mod.time[itmp])), c(ocheat.95[itmp],rev(ocheat.05[itmp])), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+    polygon(c(mod.time[itmp],rev(mod.time[itmp])), c(standard.ocheat.95[itmp],rev(standard.ocheat.05[itmp])), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
     lines(obs.ocheat.time, obs.ocheat.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
     lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
     polygon(c(obs.ocheat.time,rev(obs.ocheat.time)), c(obs.ocheat.norm+n.sig*obs.ocheat.err,rev(obs.ocheat.norm-n.sig*obs.ocheat.err)),
             col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
   }
   # >>> GSIC <<<
-  itmp=midx.gsic[1]:nrow(gsic.hind)
-  plot(mod.time[itmp], gsic.50[itmp], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
+  itmp=midx.gsic[1]:nrow(standard.gsic.hind)
+  plot(mod.time[itmp], standard.gsic.50[itmp], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
        ylab='', xlim=c(1950,2016), ylim=c(-.01,.04), cex.lab=1.2, cex.axis=1.2);
   mtext(side=1, text='Year', line=2.3, cex=.9);
   # mtext(side=2, text='Glaciers and\nsmall ice caps [m SLE]', line=2.3, cex=.9);
   mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
   # mtext(side=3, text=expression(bold(' c')), line=.25, cex=.9, adj=0);
   mtext(side=3, text=expression(bold(' a) Glaciers and Ice Caps')), line=.25, cex=.9, adj=0);
-  polygon(c(mod.time[itmp],rev(mod.time[itmp])), c(gsic.95[itmp],rev(gsic.05[itmp])), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+  polygon(c(mod.time[itmp],rev(mod.time[itmp])), c(standard.gsic.95[itmp],rev(standard.gsic.05[itmp])), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
   # lines(obs.gsic.time, obs.gsic.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
   points(obs.gsic.time, obs.gsic.norm, pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
   lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
-  polygon(c(obs.gsic.time,rev(obs.gsic.time)), c(obs.gsic.norm+n.sig*obs.gsic.err,rev(obs.gsic.norm-n.sig*obs.gsic.err)),
-          col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
+  # polygon(c(obs.gsic.time,rev(obs.gsic.time)), c(obs.gsic.norm+n.sig*obs.gsic.err,rev(obs.gsic.norm-n.sig*obs.gsic.err)),
+  #         col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
+  # polygon(c(obs.gsic.time,rev(obs.gsic.time)), c(obs.gsic.norm+n.sig*obs.gsic.err,rev(obs.gsic.norm-n.sig*obs.gsic.err)),
+  #         col=NA, 
+  #         border=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5),
+  #         lwd=2,
+  #         lty="dashed");
   
   # >>> GIS <<<
-  plot(mod.time, gis.50, type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
+  plot(mod.time, standard.gis.50, type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
        ylab='', xlim=c(1950,2016), ylim=c(-.003,.01), cex.lab=1.2, cex.axis=1.2);
   mtext(side=1, text='Year', line=2.3, cex=.9);
   # mtext(side=2, text='Greenland Ice Sheet\n[m SLE]', line=2.3, cex=.9);
   mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
   mtext(side=3, text=expression(bold(' b) Greenland Ice Sheet')), line=.25, cex=.9, adj=0);
-  polygon(c(mod.time,rev(mod.time)), c(gis.95,rev(gis.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+  polygon(c(mod.time,rev(mod.time)), c(standard.gis.95,rev(standard.gis.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
   # lines(obs.gis.time, obs.gis.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
   points(obs.gis.time, obs.gis.norm, pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
   lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
-  polygon(c(obs.gis.time,rev(obs.gis.time)), c(obs.gis.norm+n.sig*sqrt(obs.gis.err^2),rev(obs.gis.norm-n.sig*sqrt(obs.gis.err^2))),
-          col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
+  # polygon(c(obs.gis.time,rev(obs.gis.time)), c(obs.gis.norm+n.sig*sqrt(obs.gis.err^2),rev(obs.gis.norm-n.sig*sqrt(obs.gis.err^2))),
+  #         col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
+  # polygon(c(obs.gis.time,rev(obs.gis.time)), c(obs.gis.norm+n.sig*sqrt(obs.gis.err^2),rev(obs.gis.norm-n.sig*sqrt(obs.gis.err^2))),
+  #         col=NA, 
+  #         border=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5),
+  #         lwd=2,
+  #         lty="dashed");
   
   # >>> TE <<<
   x1971=seq(trends.te[1,4],trends.te[1,5])
-  c1971=mean(x1971); yc1971=te.50[which(mod.time==mean(x1971))]
+  c1971=mean(x1971); yc1971=standard.te.50[which(mod.time==mean(x1971))]
   lo1971 = yc1971+(trends.te[1,2]/1000)*(x1971-c1971)
   hi1971 = yc1971+(trends.te[1,3]/1000)*(x1971-c1971)
   y1971 = yc1971+(trends.te[1,1]/1000)*(x1971-c1971)
 
   x1993=seq(trends.te[2,4],trends.te[2,5])
-  c1993=mean(x1993); yc1993=te.50[which(mod.time==mean(x1993))]
+  c1993=mean(x1993); yc1993=standard.te.50[which(mod.time==mean(x1993))]
   lo1993 = yc1993+(trends.te[2,2]/1000)*(x1993-c1993)
   hi1993 = yc1993+(trends.te[2,3]/1000)*(x1993-c1993)
   y1993 = yc1993+(trends.te[2,1]/1000)*(x1993-c1993)
@@ -363,13 +454,13 @@ if(TRUE){
   # hi1993 <- readRDS("TE_hi1993.rds")
   # y1993 <- readRDS("TE_y1993.rds")
   
-  plot(mod.time, te.50, type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
+  plot(mod.time, standard.te.50, type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
        ylab='', xlim=c(1950,2016), ylim=c(-.04,.06), cex.lab=1.2, cex.axis=1.2);
   mtext(side=1, text='Year', line=2.3, cex=.9);
   # mtext(side=2, text='Thermal expansion\n[m SLE]', line=2.3, cex=.9);
   mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
   mtext(side=3, text=expression(bold(' c) Thermal Expansion')), line=.25, cex=.9, adj=0);
-  polygon(c(mod.time,rev(mod.time)), c(te.95,rev(te.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+  polygon(c(mod.time,rev(mod.time)), c(standard.te.95,rev(standard.te.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
   lines(x1971,y1971, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
   # points(x1971,y1971, pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
   polygon(c(x1971,rev(x1971)), c(lo1971,rev(hi1971)), col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
@@ -379,23 +470,27 @@ if(TRUE){
   polygon(c(x1993,rev(x1993)), c(lo1993,rev(hi1993)), col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
   
   # >>> TOTAL SLR <<<
-  plot(mod.time, slr.50, type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
+  plot(mod.time, standard.slr.50, type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
        ylab='', xlim=c(1850,2016), ylim=c(-.3,.2), cex.lab=1.2, cex.axis=1.2);
   mtext(side=1, text='Year', line=2.3, cex=.9);
   # mtext(side=2, text='Total sea level [m]', line=2.3, cex=.9);
   mtext(side=2, text='[m]', line=2.3, cex=.9);
   mtext(side=3, text=expression(bold(' d) Total Sea Level')), line=.25, cex=.9, adj=0);
-  polygon(c(mod.time,rev(mod.time)), c(slr.95,rev(slr.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+  polygon(c(mod.time,rev(mod.time)), c(standard.slr.95,rev(standard.slr.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
   # lines(obs.sl.time, obs.sl.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
   points(obs.sl.time, obs.sl.norm,pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
   lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
-  polygon(c(obs.sl.time,rev(obs.sl.time)), c(obs.sl.norm+n.sig*obs.sl.err,rev(obs.sl.norm-n.sig*obs.sl.err)),
-          col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
+  # polygon(c(obs.sl.time,rev(obs.sl.time)), c(obs.sl.norm+n.sig*obs.sl.err,rev(obs.sl.norm-n.sig*obs.sl.err)),
+  #         col=NA, 
+  #         border=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5),
+  #         lwd=2,
+  #         lty="dashed");
+  
   
   # >>> AIS PALEO, SMOOTHED <<<
-  ipaleo=which(t.paleo==-149999):which(t.paleo==1)
-  plot(t.paleo[ipaleo], ais.paleo.50[ipaleo], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
-       ylab='', xlim=c(t.paleo[ipaleo[1]],t.paleo[ipaleo[length(ipaleo)]]),
+  ipaleo=which(standard.t.paleo==-149999):which(standard.t.paleo==1)
+  plot(standard.t.paleo[ipaleo], standard.ais.paleo.50[ipaleo], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
+       ylab='', xlim=c(standard.t.paleo[ipaleo[1]],standard.t.paleo[ipaleo[length(ipaleo)]]),
        # ylim=c(-20,10),
        ylim=c(-20,16),
        cex.lab=1.2, cex.axis=1.2);
@@ -403,7 +498,7 @@ if(TRUE){
   # mtext(side=2, text='Antarctic Ice Sheet\n[m SLE]', line=2.3, cex=.9);
   mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
   mtext(side=3, text=expression(bold(' e) Antarctic Ice Sheet')), line=.25, cex=.9, adj=0);
-  polygon(c(t.paleo[ipaleo],rev(t.paleo[ipaleo])), c(ais.paleo.95[ipaleo],rev(ais.paleo.05[ipaleo])), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+  polygon(c(standard.t.paleo[ipaleo],rev(standard.t.paleo[ipaleo])), c(standard.ais.paleo.95[ipaleo],rev(standard.ais.paleo.05[ipaleo])), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
   for (i in 1:3) {
     polygon(c( date[c(obs.years[i]-1000,obs.years[i]+1000)], rev(date[c(obs.years[i]-1000,obs.years[i]+1000)]) ),
             c( c(windows[i,2],windows[i,2])                , rev(c(windows[i,1],windows[i,1]))                 ),
@@ -431,7 +526,7 @@ if(TRUE){
                horiz = FALSE)
   
 }
-dev.off()
+# dev.off()
 ##==============================================================================
 ##==============================================================================
 
@@ -443,227 +538,323 @@ dev.off()
 
 # ncdata <- nc_open(filename.brick.magicc)
 # t.proj = ncvar_get(ncdata, 'time_proj')
-# slr.rcp26 = ncvar_get(ncdata, 'GlobalSeaLevel_RCP26')
+# standard.slr.rcp26 = ncvar_get(ncdata, 'GlobalSeaLevel_RCP26')
 # slr.rcp45 = ncvar_get(ncdata, 'GlobalSeaLevel_RCP45')
 # slr.rcp85 = ncvar_get(ncdata, 'GlobalSeaLevel_RCP85')
-# te.rcp26 = ncvar_get(ncdata, 'TE_RCP26')
+# standard.te.rcp26 = ncvar_get(ncdata, 'TE_RCP26')
 # te.rcp45 = ncvar_get(ncdata, 'TE_RCP45')
 # te.rcp85 = ncvar_get(ncdata, 'TE_RCP85')
-# gis.rcp26 = ncvar_get(ncdata, 'GIS_RCP26')
+# standard.gis.rcp26 = ncvar_get(ncdata, 'GIS_RCP26')
 # gis.rcp45 = ncvar_get(ncdata, 'GIS_RCP45')
 # gis.rcp85 = ncvar_get(ncdata, 'GIS_RCP85')
-# gsic.rcp26 = ncvar_get(ncdata, 'GSIC_RCP26')
+# standard.gsic.rcp26 = ncvar_get(ncdata, 'GSIC_RCP26')
 # gsic.rcp45 = ncvar_get(ncdata, 'GSIC_RCP45')
 # gsic.rcp85 = ncvar_get(ncdata, 'GSIC_RCP85')
-# ais.rcp26 = ncvar_get(ncdata, 'AIS_RCP26')
+# standard.ais.rcp26 = ncvar_get(ncdata, 'AIS_RCP26')
 # ais.rcp45 = ncvar_get(ncdata, 'AIS_RCP45')
 # ais.rcp85 = ncvar_get(ncdata, 'AIS_RCP85')
-# temp.rcp26 = ncvar_get(ncdata, 'temp_RCP26')
+# standard.temp.rcp26 = ncvar_get(ncdata, 'temp_RCP26')
 # temp.rcp45 = ncvar_get(ncdata, 'temp_RCP45')
 # temp.rcp85 = ncvar_get(ncdata, 'temp_RCP85')
-# ocheat.rcp26 = ncvar_get(ncdata, 'ocheat_RCP26')
+# standard.ocheat.rcp26 = ncvar_get(ncdata, 'ocheat_RCP26')
 # ocheat.rcp45 = ncvar_get(ncdata, 'ocheat_RCP45')
 # ocheat.rcp85 = ncvar_get(ncdata, 'ocheat_RCP85')
 # nc_close(ncdata)
 
 #transpose:
-slr.rcp26 <- t(slr.rcp26)
-te.rcp26 <- t(te.rcp26)
-gis.rcp26 <- t(gis.rcp26)
-gsic.rcp26 <- t(gsic.rcp26)
-ais.rcp26 <- t(ais.rcp26)
-temp.rcp26 <- t(temp.rcp26)
-ocheat.rcp26 <- t(ocheat.rcp26)
+
+# priors
+priors.slr.rcp26 <- t(priors.slr.rcp26)
+priors.te.rcp26 <- t(priors.te.rcp26)
+priors.gis.rcp26 <- t(priors.gis.rcp26)
+priors.gsic.rcp26 <- t(priors.gsic.rcp26)
+priors.ais.rcp26 <- t(priors.ais.rcp26)
+priors.temp.rcp26 <- t(priors.temp.rcp26)
+priors.ocheat.rcp26 <- t(priors.ocheat.rcp26)
+
+# experts
+experts.slr.rcp26 <- t(experts.slr.rcp26)
+experts.te.rcp26 <- t(experts.te.rcp26)
+experts.gis.rcp26 <- t(experts.gis.rcp26)
+experts.gsic.rcp26 <- t(experts.gsic.rcp26)
+experts.ais.rcp26 <- t(experts.ais.rcp26)
+experts.temp.rcp26 <- t(experts.temp.rcp26)
+experts.ocheat.rcp26 <- t(experts.ocheat.rcp26)
+
+
+# standard
+standard.slr.rcp26 <- t(standard.slr.rcp26)
+standard.te.rcp26 <- t(standard.te.rcp26)
+standard.gis.rcp26 <- t(standard.gis.rcp26)
+standard.gsic.rcp26 <- t(standard.gsic.rcp26)
+standard.ais.rcp26 <- t(standard.ais.rcp26)
+standard.temp.rcp26 <- t(standard.temp.rcp26)
+standard.ocheat.rcp26 <- t(standard.ocheat.rcp26)
+
+# complete
+complete.slr.rcp26 <- t(complete.slr.rcp26)
+complete.te.rcp26 <- t(complete.te.rcp26)
+complete.gis.rcp26 <- t(complete.gis.rcp26)
+complete.gsic.rcp26 <- t(complete.gsic.rcp26)
+complete.ais.rcp26 <- t(complete.ais.rcp26)
+complete.temp.rcp26 <- t(complete.temp.rcp26)
+complete.ocheat.rcp26 <- t(complete.ocheat.rcp26)
 
 
 ## Initialize arrays for the output
-slr.rcp26.05 = rep(NA,length(t.proj)); slr.rcp26.50 = rep(NA,length(t.proj)); slr.rcp26.95 = rep(NA,length(t.proj))
-# slr.rcp45.05 = rep(NA,length(t.proj)); slr.rcp45.50 = rep(NA,length(t.proj)); slr.rcp45.95 = rep(NA,length(t.proj))
-# slr.rcp85.05 = rep(NA,length(t.proj)); slr.rcp85.50 = rep(NA,length(t.proj)); slr.rcp85.95 = rep(NA,length(t.proj))
-ais.rcp26.05 = rep(NA,length(t.proj)); ais.rcp26.50 = rep(NA,length(t.proj)); ais.rcp26.95 = rep(NA,length(t.proj))
-# ais.rcp45.05 = rep(NA,length(t.proj)); ais.rcp45.50 = rep(NA,length(t.proj)); ais.rcp45.95 = rep(NA,length(t.proj))
-# ais.rcp85.05 = rep(NA,length(t.proj)); ais.rcp85.50 = rep(NA,length(t.proj)); ais.rcp85.95 = rep(NA,length(t.proj))
-gis.rcp26.05 = rep(NA,length(t.proj)); gis.rcp26.50 = rep(NA,length(t.proj)); gis.rcp26.95 = rep(NA,length(t.proj))
-# gis.rcp45.05 = rep(NA,length(t.proj)); gis.rcp45.50 = rep(NA,length(t.proj)); gis.rcp45.95 = rep(NA,length(t.proj))
-# gis.rcp85.05 = rep(NA,length(t.proj)); gis.rcp85.50 = rep(NA,length(t.proj)); gis.rcp85.95 = rep(NA,length(t.proj))
-gsic.rcp26.05 = rep(NA,length(t.proj)); gsic.rcp26.50 = rep(NA,length(t.proj)); gsic.rcp26.95 = rep(NA,length(t.proj))
-# gsic.rcp45.05 = rep(NA,length(t.proj)); gsic.rcp45.50 = rep(NA,length(t.proj)); gsic.rcp45.95 = rep(NA,length(t.proj))
-# gsic.rcp85.05 = rep(NA,length(t.proj)); gsic.rcp85.50 = rep(NA,length(t.proj)); gsic.rcp85.95 = rep(NA,length(t.proj))
-te.rcp26.05 = rep(NA,length(t.proj)); te.rcp26.50 = rep(NA,length(t.proj)); te.rcp26.95 = rep(NA,length(t.proj))
-# te.rcp45.05 = rep(NA,length(t.proj)); te.rcp45.50 = rep(NA,length(t.proj)); te.rcp45.95 = rep(NA,length(t.proj))
-# te.rcp85.05 = rep(NA,length(t.proj)); te.rcp85.50 = rep(NA,length(t.proj)); te.rcp85.95 = rep(NA,length(t.proj))
-temp.rcp26.05 = rep(NA,length(t.proj)); temp.rcp26.50 = rep(NA,length(t.proj)); temp.rcp26.95 = rep(NA,length(t.proj))
-# temp.rcp45.05 = rep(NA,length(t.proj)); temp.rcp45.50 = rep(NA,length(t.proj)); temp.rcp45.95 = rep(NA,length(t.proj))
-# temp.rcp85.05 = rep(NA,length(t.proj)); temp.rcp85.50 = rep(NA,length(t.proj)); temp.rcp85.95 = rep(NA,length(t.proj))
-ocheat.rcp26.05 = rep(NA,length(t.proj)); ocheat.rcp26.50 = rep(NA,length(t.proj)); ocheat.rcp26.95 = rep(NA,length(t.proj))
-# ocheat.rcp45.05 = rep(NA,length(t.proj)); ocheat.rcp45.50 = rep(NA,length(t.proj)); ocheat.rcp45.95 = rep(NA,length(t.proj))
-# ocheat.rcp85.05 = rep(NA,length(t.proj)); ocheat.rcp85.50 = rep(NA,length(t.proj)); ocheat.rcp85.95 = rep(NA,length(t.proj))
+# priors
+priors.slr.rcp26.05 = rep(NA,length(t.proj)); priors.slr.rcp26.50 = rep(NA,length(t.proj)); priors.slr.rcp26.95 = rep(NA,length(t.proj))
+priors.ais.rcp26.05 = rep(NA,length(t.proj)); priors.ais.rcp26.50 = rep(NA,length(t.proj)); priors.ais.rcp26.95 = rep(NA,length(t.proj))
+priors.gis.rcp26.05 = rep(NA,length(t.proj)); priors.gis.rcp26.50 = rep(NA,length(t.proj)); priors.gis.rcp26.95 = rep(NA,length(t.proj))
+priors.gsic.rcp26.05 = rep(NA,length(t.proj)); priors.gsic.rcp26.50 = rep(NA,length(t.proj)); priors.gsic.rcp26.95 = rep(NA,length(t.proj))
+priors.te.rcp26.05 = rep(NA,length(t.proj)); priors.te.rcp26.50 = rep(NA,length(t.proj)); priors.te.rcp26.95 = rep(NA,length(t.proj))
+priors.temp.rcp26.05 = rep(NA,length(t.proj)); priors.temp.rcp26.50 = rep(NA,length(t.proj)); priors.temp.rcp26.95 = rep(NA,length(t.proj))
+priors.ocheat.rcp26.05 = rep(NA,length(t.proj)); priors.ocheat.rcp26.50 = rep(NA,length(t.proj)); priors.ocheat.rcp26.95 = rep(NA,length(t.proj))
+
+# experts
+experts.slr.rcp26.05 = rep(NA,length(t.proj)); experts.slr.rcp26.50 = rep(NA,length(t.proj)); experts.slr.rcp26.95 = rep(NA,length(t.proj))
+experts.ais.rcp26.05 = rep(NA,length(t.proj)); experts.ais.rcp26.50 = rep(NA,length(t.proj)); experts.ais.rcp26.95 = rep(NA,length(t.proj))
+experts.gis.rcp26.05 = rep(NA,length(t.proj)); experts.gis.rcp26.50 = rep(NA,length(t.proj)); experts.gis.rcp26.95 = rep(NA,length(t.proj))
+experts.gsic.rcp26.05 = rep(NA,length(t.proj)); experts.gsic.rcp26.50 = rep(NA,length(t.proj)); experts.gsic.rcp26.95 = rep(NA,length(t.proj))
+experts.te.rcp26.05 = rep(NA,length(t.proj)); experts.te.rcp26.50 = rep(NA,length(t.proj)); experts.te.rcp26.95 = rep(NA,length(t.proj))
+experts.temp.rcp26.05 = rep(NA,length(t.proj)); experts.temp.rcp26.50 = rep(NA,length(t.proj)); experts.temp.rcp26.95 = rep(NA,length(t.proj))
+experts.ocheat.rcp26.05 = rep(NA,length(t.proj)); experts.ocheat.rcp26.50 = rep(NA,length(t.proj)); experts.ocheat.rcp26.95 = rep(NA,length(t.proj))
+
+# standard
+standard.slr.rcp26.05 = rep(NA,length(t.proj)); standard.slr.rcp26.50 = rep(NA,length(t.proj)); standard.slr.rcp26.95 = rep(NA,length(t.proj))
+standard.ais.rcp26.05 = rep(NA,length(t.proj)); standard.ais.rcp26.50 = rep(NA,length(t.proj)); standard.ais.rcp26.95 = rep(NA,length(t.proj))
+standard.gis.rcp26.05 = rep(NA,length(t.proj)); standard.gis.rcp26.50 = rep(NA,length(t.proj)); standard.gis.rcp26.95 = rep(NA,length(t.proj))
+standard.gsic.rcp26.05 = rep(NA,length(t.proj)); standard.gsic.rcp26.50 = rep(NA,length(t.proj)); standard.gsic.rcp26.95 = rep(NA,length(t.proj))
+standard.te.rcp26.05 = rep(NA,length(t.proj)); standard.te.rcp26.50 = rep(NA,length(t.proj)); standard.te.rcp26.95 = rep(NA,length(t.proj))
+standard.temp.rcp26.05 = rep(NA,length(t.proj)); standard.temp.rcp26.50 = rep(NA,length(t.proj)); standard.temp.rcp26.95 = rep(NA,length(t.proj))
+standard.ocheat.rcp26.05 = rep(NA,length(t.proj)); standard.ocheat.rcp26.50 = rep(NA,length(t.proj)); standard.ocheat.rcp26.95 = rep(NA,length(t.proj))
+
+# complete
+complete.slr.rcp26.05 = rep(NA,length(t.proj)); complete.slr.rcp26.50 = rep(NA,length(t.proj)); complete.slr.rcp26.95 = rep(NA,length(t.proj))
+complete.ais.rcp26.05 = rep(NA,length(t.proj)); complete.ais.rcp26.50 = rep(NA,length(t.proj)); complete.ais.rcp26.95 = rep(NA,length(t.proj))
+complete.gis.rcp26.05 = rep(NA,length(t.proj)); complete.gis.rcp26.50 = rep(NA,length(t.proj)); complete.gis.rcp26.95 = rep(NA,length(t.proj))
+complete.gsic.rcp26.05 = rep(NA,length(t.proj)); complete.gsic.rcp26.50 = rep(NA,length(t.proj)); complete.gsic.rcp26.95 = rep(NA,length(t.proj))
+complete.te.rcp26.05 = rep(NA,length(t.proj)); complete.te.rcp26.50 = rep(NA,length(t.proj)); complete.te.rcp26.95 = rep(NA,length(t.proj))
+complete.temp.rcp26.05 = rep(NA,length(t.proj)); complete.temp.rcp26.50 = rep(NA,length(t.proj)); complete.temp.rcp26.95 = rep(NA,length(t.proj))
+complete.ocheat.rcp26.05 = rep(NA,length(t.proj)); complete.ocheat.rcp26.50 = rep(NA,length(t.proj)); complete.ocheat.rcp26.95 = rep(NA,length(t.proj))
 
 source('../Useful/MultipleOutput.R') # defines the ":=" operator
 
 ## Actually tally up the data
 for (t in 1:length(t.proj)){
-  c(slr.rcp26.05[t], slr.rcp26.50[t], slr.rcp26.95[t]) := quantile(slr.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
-  # c(slr.rcp45.05[t], slr.rcp45.50[t], slr.rcp45.95[t]) := quantile(slr.rcp45[t,], c(0.05,.50,.95), na.rm=TRUE)
-  # c(slr.rcp85.05[t], slr.rcp85.50[t], slr.rcp85.95[t]) := quantile(slr.rcp85[t,], c(0.05,.50,.95), na.rm=TRUE)
-  c(ais.rcp26.05[t], ais.rcp26.50[t], ais.rcp26.95[t]) := quantile(ais.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
-  # c(ais.rcp45.05[t], ais.rcp45.50[t], ais.rcp45.95[t]) := quantile(ais.rcp45[t,], c(0.05,.50,.95), na.rm=TRUE)
-  # c(ais.rcp85.05[t], ais.rcp85.50[t], ais.rcp85.95[t]) := quantile(ais.rcp85[t,], c(0.05,.50,.95), na.rm=TRUE)
-  c(gis.rcp26.05[t], gis.rcp26.50[t], gis.rcp26.95[t]) := quantile(gis.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
-  # c(gis.rcp45.05[t], gis.rcp45.50[t], gis.rcp45.95[t]) := quantile(gis.rcp45[t,], c(0.05,.50,.95), na.rm=TRUE)
-  # c(gis.rcp85.05[t], gis.rcp85.50[t], gis.rcp85.95[t]) := quantile(gis.rcp85[t,], c(0.05,.50,.95), na.rm=TRUE)
-  c(gsic.rcp26.05[t], gsic.rcp26.50[t], gsic.rcp26.95[t]) := quantile(gsic.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
-  # c(gsic.rcp45.05[t], gsic.rcp45.50[t], gsic.rcp45.95[t]) := quantile(gsic.rcp45[t,], c(0.05,.50,.95), na.rm=TRUE)
-  # c(gsic.rcp85.05[t], gsic.rcp85.50[t], gsic.rcp85.95[t]) := quantile(gsic.rcp85[t,], c(0.05,.50,.95), na.rm=TRUE)
-  c(te.rcp26.05[t], te.rcp26.50[t], te.rcp26.95[t]) := quantile(te.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
-  # c(te.rcp45.05[t], te.rcp45.50[t], te.rcp45.95[t]) := quantile(te.rcp45[t,], c(0.05,.50,.95), na.rm=TRUE)
-  # c(te.rcp85.05[t], te.rcp85.50[t], te.rcp85.95[t]) := quantile(te.rcp85[t,], c(0.05,.50,.95), na.rm=TRUE)
-  c(temp.rcp26.05[t], temp.rcp26.50[t], temp.rcp26.95[t]) := quantile(temp.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
-  # c(temp.rcp45.05[t], temp.rcp45.50[t], temp.rcp45.95[t]) := quantile(temp.rcp45[t,], c(0.05,.50,.95), na.rm=TRUE)
-  # c(temp.rcp85.05[t], temp.rcp85.50[t], temp.rcp85.95[t]) := quantile(temp.rcp85[t,], c(0.05,.50,.95), na.rm=TRUE)
-  c(ocheat.rcp26.05[t], ocheat.rcp26.50[t], ocheat.rcp26.95[t]) := quantile(ocheat.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
-  # c(ocheat.rcp45.05[t], ocheat.rcp45.50[t], ocheat.rcp45.95[t]) := quantile(ocheat.rcp45[t,], c(0.05,.50,.95), na.rm=TRUE)
-  # c(ocheat.rcp85.05[t], ocheat.rcp85.50[t], ocheat.rcp85.95[t]) := quantile(ocheat.rcp85[t,], c(0.05,.50,.95), na.rm=TRUE)
+  # priors
+  c(priors.slr.rcp26.05[t], priors.slr.rcp26.50[t], priors.slr.rcp26.95[t]) := quantile(priors.slr.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(priors.ais.rcp26.05[t], priors.ais.rcp26.50[t], priors.ais.rcp26.95[t]) := quantile(priors.ais.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(priors.gis.rcp26.05[t], priors.gis.rcp26.50[t], priors.gis.rcp26.95[t]) := quantile(priors.gis.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(priors.gsic.rcp26.05[t], priors.gsic.rcp26.50[t], priors.gsic.rcp26.95[t]) := quantile(priors.gsic.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(priors.te.rcp26.05[t], priors.te.rcp26.50[t], priors.te.rcp26.95[t]) := quantile(priors.te.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(priors.temp.rcp26.05[t], priors.temp.rcp26.50[t], priors.temp.rcp26.95[t]) := quantile(priors.temp.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(priors.ocheat.rcp26.05[t], priors.ocheat.rcp26.50[t], priors.ocheat.rcp26.95[t]) := quantile(priors.ocheat.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  
+  # experts
+  c(experts.slr.rcp26.05[t], experts.slr.rcp26.50[t], experts.slr.rcp26.95[t]) := quantile(experts.slr.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(experts.ais.rcp26.05[t], experts.ais.rcp26.50[t], experts.ais.rcp26.95[t]) := quantile(experts.ais.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(experts.gis.rcp26.05[t], experts.gis.rcp26.50[t], experts.gis.rcp26.95[t]) := quantile(experts.gis.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(experts.gsic.rcp26.05[t], experts.gsic.rcp26.50[t], experts.gsic.rcp26.95[t]) := quantile(experts.gsic.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(experts.te.rcp26.05[t], experts.te.rcp26.50[t], experts.te.rcp26.95[t]) := quantile(experts.te.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(experts.temp.rcp26.05[t], experts.temp.rcp26.50[t], experts.temp.rcp26.95[t]) := quantile(experts.temp.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(experts.ocheat.rcp26.05[t], experts.ocheat.rcp26.50[t], experts.ocheat.rcp26.95[t]) := quantile(experts.ocheat.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  
+  # standard
+  c(standard.slr.rcp26.05[t], standard.slr.rcp26.50[t], standard.slr.rcp26.95[t]) := quantile(standard.slr.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(standard.ais.rcp26.05[t], standard.ais.rcp26.50[t], standard.ais.rcp26.95[t]) := quantile(standard.ais.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(standard.gis.rcp26.05[t], standard.gis.rcp26.50[t], standard.gis.rcp26.95[t]) := quantile(standard.gis.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(standard.gsic.rcp26.05[t], standard.gsic.rcp26.50[t], standard.gsic.rcp26.95[t]) := quantile(standard.gsic.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(standard.te.rcp26.05[t], standard.te.rcp26.50[t], standard.te.rcp26.95[t]) := quantile(standard.te.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(standard.temp.rcp26.05[t], standard.temp.rcp26.50[t], standard.temp.rcp26.95[t]) := quantile(standard.temp.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(standard.ocheat.rcp26.05[t], standard.ocheat.rcp26.50[t], standard.ocheat.rcp26.95[t]) := quantile(standard.ocheat.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  
+  # complete
+  c(complete.slr.rcp26.05[t], complete.slr.rcp26.50[t], complete.slr.rcp26.95[t]) := quantile(complete.slr.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(complete.ais.rcp26.05[t], complete.ais.rcp26.50[t], complete.ais.rcp26.95[t]) := quantile(complete.ais.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(complete.gis.rcp26.05[t], complete.gis.rcp26.50[t], complete.gis.rcp26.95[t]) := quantile(complete.gis.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(complete.gsic.rcp26.05[t], complete.gsic.rcp26.50[t], complete.gsic.rcp26.95[t]) := quantile(complete.gsic.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(complete.te.rcp26.05[t], complete.te.rcp26.50[t], complete.te.rcp26.95[t]) := quantile(complete.te.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(complete.temp.rcp26.05[t], complete.temp.rcp26.50[t], complete.temp.rcp26.95[t]) := quantile(complete.temp.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
+  c(complete.ocheat.rcp26.05[t], complete.ocheat.rcp26.50[t], complete.ocheat.rcp26.95[t]) := quantile(complete.ocheat.rcp26[t,], c(0.05,.50,.95), na.rm=TRUE)
 }
 
 iproj = which(t.proj==2000):which(t.proj==2100)
 i2100 = which(t.proj==2100)
 
-print('==============================================================')
-print('min/5%/50%/95%/max of 2100 sea level relative to 1986-2005:')
-print(paste('RCP2.6: ',quantile(slr.rcp26[251,],c(0,.05,.50,.95,1))))
-# print(paste('RCP4.5: ',quantile(slr.rcp45[251,],c(0,.05,.50,.95,1))))
-# print(paste('RCP8.5: ',quantile(slr.rcp85[251,],c(0,.05,.50,.95,1))))
-print('==============================================================')
+# compute SLR densities
+# GIS
+priors.gis.2100 <- priors.gis.rcp26[nrow(priors.gis.rcp26),]
+experts.gis.2100 <- experts.gis.rcp26[nrow(experts.gis.rcp26),]
+standard.gis.2100 <- standard.gis.rcp26[nrow(standard.gis.rcp26),]
+complete.gis.2100 <- complete.gis.rcp26[nrow(complete.gis.rcp26),]
 
-i2050 <- which(t.proj==2050)
-print('==============================================================')
-print('min/5%/50%/95%/max of 2050 sea level relative to 1986-2005:')
-print(paste('RCP2.6: ',quantile(slr.rcp26[i2050,],c(0,.05,.50,.95,1))))
-# print(paste('RCP4.5: ',quantile(slr.rcp45[i2050,],c(0,.05,.50,.95,1))))
-# print(paste('RCP8.5: ',quantile(slr.rcp85[i2050,],c(0,.05,.50,.95,1))))
-print('==============================================================')
+priors.density.gis.2100 <- density(priors.gis.2100)
+experts.density.gis.2100 <- density(experts.gis.2100)
+standard.density.gis.2100 <- density(standard.gis.2100)
+complete.density.gis.2100 <- density(complete.gis.2100)
 
-##==============================================================================
+# AIS
+priors.ais.2100 <- priors.ais.rcp26[nrow(priors.ais.rcp26),]
+experts.ais.2100 <- experts.ais.rcp26[nrow(experts.ais.rcp26),]
+standard.ais.2100 <- standard.ais.rcp26[nrow(standard.ais.rcp26),]
+complete.ais.2100 <- complete.ais.rcp26[nrow(complete.ais.rcp26),]
 
-##
-## 5-95% CI and median of 2100 SLR and all contributions under the RCP scenarios
-##
+priors.density.ais.2100 <- density(priors.ais.2100)
+experts.density.ais.2100 <- density(experts.ais.2100)
+standard.density.ais.2100 <- density(standard.ais.2100)
+complete.density.ais.2100 <- density(complete.ais.2100)
 
-# slr.ci90 = data.frame( cbind( c('RCP2.6','RCP4.5','RCP8.5'),
-#                               c(slr.rcp26.50[i2100],slr.rcp45.50[i2100],slr.rcp85.50[i2100]),
-#                               c(slr.rcp26.05[i2100],slr.rcp45.05[i2100],slr.rcp85.05[i2100]),
-#                               c(slr.rcp26.95[i2100],slr.rcp45.95[i2100],slr.rcp85.95[i2100])
-# ))
+# TOTAL SLR
+priors.slr.2100 <- priors.slr.rcp26[nrow(priors.slr.rcp26),]
+experts.slr.2100 <- experts.slr.rcp26[nrow(experts.slr.rcp26),]
+standard.slr.2100 <- standard.slr.rcp26[nrow(standard.slr.rcp26),]
+complete.slr.2100 <- complete.slr.rcp26[nrow(complete.slr.rcp26),]
 
-# gsic.ci90 = data.frame( cbind( c('RCP2.6','RCP4.5','RCP8.5'),
-#                                c(gsic.rcp26.50[i2100],gsic.rcp45.50[i2100],gsic.rcp85.50[i2100]),
-#                                c(gsic.rcp26.05[i2100],gsic.rcp45.05[i2100],gsic.rcp85.05[i2100]),
-#                                c(gsic.rcp26.95[i2100],gsic.rcp45.95[i2100],gsic.rcp85.95[i2100])
-# ))
-# gis.ci90 = data.frame( cbind( c('RCP2.6','RCP4.5','RCP8.5'),
-#                               c(gis.rcp26.50[i2100],gis.rcp45.50[i2100],gis.rcp85.50[i2100]),
-#                               c(gis.rcp26.05[i2100],gis.rcp45.05[i2100],gis.rcp85.05[i2100]),
-#                               c(gis.rcp26.95[i2100],gis.rcp45.95[i2100],gis.rcp85.95[i2100])
-# ))
-# te.ci90 = data.frame( cbind( c('RCP2.6','RCP4.5','RCP8.5'),
-#                              c(te.rcp26.50[i2100],te.rcp45.50[i2100],te.rcp85.50[i2100]),
-#                              c(te.rcp26.05[i2100],te.rcp45.05[i2100],te.rcp85.05[i2100]),
-#                              c(te.rcp26.95[i2100],te.rcp45.95[i2100],te.rcp85.95[i2100])
-# ))
-# ais.ci90 = data.frame( cbind( c('RCP2.6','RCP4.5','RCP8.5'),
-#                               c(ais.rcp26.50[i2100],ais.rcp45.50[i2100],ais.rcp85.50[i2100]),
-#                               c(ais.rcp26.05[i2100],ais.rcp45.05[i2100],ais.rcp85.05[i2100]),
-#                               c(ais.rcp26.95[i2100],ais.rcp45.95[i2100],ais.rcp85.95[i2100])
-# ))
+priors.density.2100 <- density(priors.slr.2100)
+experts.density.2100 <- density(experts.slr.2100)
+standard.density.2100 <- density(standard.slr.2100)
+complete.density.2100 <- density(complete.slr.2100)
 
-slr.ci90 = data.frame( cbind( c('RCP2.6'),
-                              c(slr.rcp26.50[i2100]),
-                              c(slr.rcp26.05[i2100]),
-                              c(slr.rcp26.95[i2100])
-))
+if(FALSE){
 
-gsic.ci90 = data.frame( cbind( c('RCP2.6'),
-                               c(gsic.rcp26.50[i2100]),
-                               c(gsic.rcp26.05[i2100]),
-                               c(gsic.rcp26.95[i2100])
-))
-gis.ci90 = data.frame( cbind( c('RCP2.6'),
-                              c(gis.rcp26.50[i2100]),
-                              c(gis.rcp26.05[i2100]),
-                              c(gis.rcp26.95[i2100])
-))
-te.ci90 = data.frame( cbind( c('RCP2.6'),
-                             c(te.rcp26.50[i2100]),
-                             c(te.rcp26.05[i2100]),
-                             c(te.rcp26.95[i2100])
-))
-ais.ci90 = data.frame( cbind( c('RCP2.6'),
-                              c(ais.rcp26.50[i2100]),
-                              c(ais.rcp26.05[i2100]),
-                              c(ais.rcp26.95[i2100])
-))
-## get into format for Latex table
-row.gsic = paste('Glaciers and small ice caps &',
-                 1000*signif(gsic.rcp26.50[i2100],4),' (',1000*signif(gsic.rcp26.05[i2100],4),'-',1000*signif(gsic.rcp26.95[i2100],4),') &',
-                 # 1000*signif(gsic.rcp45.50[i2100],4),' (',1000*signif(gsic.rcp45.05[i2100],4),'-',1000*signif(gsic.rcp45.95[i2100],4),') &',
-                 # 1000*signif(gsic.rcp85.50[i2100],4),' (',1000*signif(gsic.rcp85.05[i2100],4),'-',1000*signif(gsic.rcp85.95[i2100],4),') \\',
-                 sep='')
-row.te = paste('Thermal expansion &',
-               1000*signif(te.rcp26.50[i2100],4),' (',1000*signif(te.rcp26.05[i2100],4),'-',1000*signif(te.rcp26.95[i2100],4),') &',
-               # 1000*signif(te.rcp45.50[i2100],4),' (',1000*signif(te.rcp45.05[i2100],4),'-',1000*signif(te.rcp45.95[i2100],4),') &',
-               # 1000*signif(te.rcp85.50[i2100],4),' (',1000*signif(te.rcp85.05[i2100],4),'-',1000*signif(te.rcp85.95[i2100],4),') \\',
-               sep='')
-row.gis = paste('Greenland Ice Sheet &',
-                1000*signif(gis.rcp26.50[i2100],4),' (',1000*signif(gis.rcp26.05[i2100],4),'-',1000*signif(gis.rcp26.95[i2100],4),') &',
-                # 1000*signif(gis.rcp45.50[i2100],4),' (',1000*signif(gis.rcp45.05[i2100],4),'-',1000*signif(gis.rcp45.95[i2100],4),') &',
-                # 1000*signif(gis.rcp85.50[i2100],4),' (',1000*signif(gis.rcp85.05[i2100],4),'-',1000*signif(gis.rcp85.95[i2100],4),') \\',
-                sep='')
-row.ais = paste('Antarctic Ice Sheet &',
-                1000*signif(ais.rcp26.50[i2100],4),' (',1000*signif(ais.rcp26.05[i2100],4),'-',1000*signif(ais.rcp26.95[i2100],4),') &',
-                # 1000*signif(ais.rcp45.50[i2100],4),' (',1000*signif(ais.rcp45.05[i2100],4),'-',1000*signif(ais.rcp45.95[i2100],4),') &',
-                # 1000*signif(ais.rcp85.50[i2100],4),' (',1000*signif(ais.rcp85.05[i2100],4),'-',1000*signif(ais.rcp85.95[i2100],4),') \\',
-                sep='')
-row.slr = paste('Total sea level &',
-                1000*signif(slr.rcp26.50[i2100],4),' (',1000*signif(slr.rcp26.05[i2100],4),'-',1000*signif(slr.rcp26.95[i2100],4),') &',
-                # 1000*signif(slr.rcp45.50[i2100],4),' (',1000*signif(slr.rcp45.05[i2100],4),'-',1000*signif(slr.rcp45.95[i2100],4),') &',
-                # 1000*signif(slr.rcp85.50[i2100],4),' (',1000*signif(slr.rcp85.05[i2100],4),'-',1000*signif(slr.rcp85.95[i2100],4),') \\',
-                sep='')
-
-# pdf(paste(plotdir,'projections_SLR_total.pdf',sep=''),width=3.5,height=2.45,colormodel='cmyk')
-# par(mfrow=c(1,1))
-# # RCP85
-# par(mai=c(.65,.65,.20,.2))
-# plot(t.proj[iproj],slr.rcp85.50[iproj],type='l',col=rgb(col85[1],col85[2],col85[3]),lwd=2, ann='',
-#      xlim=c(2000,2100), ylim=c(0,2), xaxt='n', yaxt='n', xaxs='i', yaxs='i');
-# axis(1, seq(2000,2100,by=20)); axis(2, seq(0,2,by=.25), lab=c('0','','0.5','','1','','1.5','','2'));
-# mtext(side=2, text='Global mean sea level [m]', line=2.2, cex=1);
-# mtext(side=1, text='Year', line=2.2, cex=1);
-# polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(slr.rcp85.95[iproj],rev(slr.rcp85.05[iproj])),
-#         col=rgb(col85[1],col85[2],col85[3],.5), border=NA);
-# # + UNIFORM RCP45
-# lines(t.proj[iproj],slr.rcp45.50[iproj],type='l',col=rgb(col45[1],col45[2],col45[3]),lwd=2);
-# polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(slr.rcp45.95[iproj],rev(slr.rcp45.05[iproj])),
-#         col=rgb(col45[1],col45[2],col45[3],.5), border=NA);
-# # + UNIFORM RCP26
-# lines(t.proj[iproj],slr.rcp26.50[iproj],type='l',col=rgb(col26[1],col26[2],col26[3]),lwd=2);
-# polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(slr.rcp26.95[iproj],rev(slr.rcp26.05[iproj])),
-#         col=rgb(col26[1],col26[2],col26[3],.5), border=NA);
-# # + legend
-# legend(t.proj[iproj[1]],2,c("5-95% range,","RCP2.6","RCP4.5","RCP8.5"),
-#        lty=c(NA,1,1,1), lwd=3, bty='n', cex=1,
-#        col=c(NA , rgb(col26[1],col26[2],col26[3]) ,
-#              rgb(col45[1],col45[2],col45[3]) , rgb(col85[1],col85[2],col85[3])))
-# 
-# dev.off()
+          
+          print('==============================================================')
+          print('min/5%/50%/95%/max of 2100 sea level relative to 1986-2005:')
+          print(paste('RCP2.6: ',quantile(standard.slr.rcp26[251,],c(0,.05,.50,.95,1))))
+          # print(paste('RCP4.5: ',quantile(slr.rcp45[251,],c(0,.05,.50,.95,1))))
+          # print(paste('RCP8.5: ',quantile(slr.rcp85[251,],c(0,.05,.50,.95,1))))
+          print('==============================================================')
+          
+          i2050 <- which(t.proj==2050)
+          print('==============================================================')
+          print('min/5%/50%/95%/max of 2050 sea level relative to 1986-2005:')
+          print(paste('RCP2.6: ',quantile(standard.slr.rcp26[i2050,],c(0,.05,.50,.95,1))))
+          # print(paste('RCP4.5: ',quantile(slr.rcp45[i2050,],c(0,.05,.50,.95,1))))
+          # print(paste('RCP8.5: ',quantile(slr.rcp85[i2050,],c(0,.05,.50,.95,1))))
+          print('==============================================================')
+          
+          ##==============================================================================
+          
+          ##
+          ## 5-95% CI and median of 2100 SLR and all contributions under the RCP scenarios
+          ##
+          
+          # slr.ci90 = data.frame( cbind( c('RCP2.6','RCP4.5','RCP8.5'),
+          #                               c(standard.slr.rcp26.50[i2100],slr.rcp45.50[i2100],slr.rcp85.50[i2100]),
+          #                               c(standard.slr.rcp26.05[i2100],slr.rcp45.05[i2100],slr.rcp85.05[i2100]),
+          #                               c(standard.slr.rcp26.95[i2100],slr.rcp45.95[i2100],slr.rcp85.95[i2100])
+          # ))
+          
+          # gsic.ci90 = data.frame( cbind( c('RCP2.6','RCP4.5','RCP8.5'),
+          #                                c(standard.gsic.rcp26.50[i2100],gsic.rcp45.50[i2100],gsic.rcp85.50[i2100]),
+          #                                c(standard.gsic.rcp26.05[i2100],gsic.rcp45.05[i2100],gsic.rcp85.05[i2100]),
+          #                                c(standard.gsic.rcp26.95[i2100],gsic.rcp45.95[i2100],gsic.rcp85.95[i2100])
+          # ))
+          # gis.ci90 = data.frame( cbind( c('RCP2.6','RCP4.5','RCP8.5'),
+          #                               c(standard.gis.rcp26.50[i2100],gis.rcp45.50[i2100],gis.rcp85.50[i2100]),
+          #                               c(standard.gis.rcp26.05[i2100],gis.rcp45.05[i2100],gis.rcp85.05[i2100]),
+          #                               c(standard.gis.rcp26.95[i2100],gis.rcp45.95[i2100],gis.rcp85.95[i2100])
+          # ))
+          # te.ci90 = data.frame( cbind( c('RCP2.6','RCP4.5','RCP8.5'),
+          #                              c(standard.te.rcp26.50[i2100],te.rcp45.50[i2100],te.rcp85.50[i2100]),
+          #                              c(standard.te.rcp26.05[i2100],te.rcp45.05[i2100],te.rcp85.05[i2100]),
+          #                              c(standard.te.rcp26.95[i2100],te.rcp45.95[i2100],te.rcp85.95[i2100])
+          # ))
+          # ais.ci90 = data.frame( cbind( c('RCP2.6','RCP4.5','RCP8.5'),
+          #                               c(standard.ais.rcp26.50[i2100],ais.rcp45.50[i2100],ais.rcp85.50[i2100]),
+          #                               c(standard.ais.rcp26.05[i2100],ais.rcp45.05[i2100],ais.rcp85.05[i2100]),
+          #                               c(standard.ais.rcp26.95[i2100],ais.rcp45.95[i2100],ais.rcp85.95[i2100])
+          # ))
+          
+          slr.ci90 = data.frame( cbind( c('RCP2.6'),
+                                        c(standard.slr.rcp26.50[i2100]),
+                                        c(standard.slr.rcp26.05[i2100]),
+                                        c(standard.slr.rcp26.95[i2100])
+          ))
+          
+          gsic.ci90 = data.frame( cbind( c('RCP2.6'),
+                                         c(standard.gsic.rcp26.50[i2100]),
+                                         c(standard.gsic.rcp26.05[i2100]),
+                                         c(standard.gsic.rcp26.95[i2100])
+          ))
+          gis.ci90 = data.frame( cbind( c('RCP2.6'),
+                                        c(standard.gis.rcp26.50[i2100]),
+                                        c(standard.gis.rcp26.05[i2100]),
+                                        c(standard.gis.rcp26.95[i2100])
+          ))
+          te.ci90 = data.frame( cbind( c('RCP2.6'),
+                                       c(standard.te.rcp26.50[i2100]),
+                                       c(standard.te.rcp26.05[i2100]),
+                                       c(standard.te.rcp26.95[i2100])
+          ))
+          ais.ci90 = data.frame( cbind( c('RCP2.6'),
+                                        c(standard.ais.rcp26.50[i2100]),
+                                        c(standard.ais.rcp26.05[i2100]),
+                                        c(standard.ais.rcp26.95[i2100])
+          ))
+          ## get into format for Latex table
+          row.gsic = paste('Glaciers and small ice caps &',
+                           1000*signif(standard.gsic.rcp26.50[i2100],4),' (',1000*signif(standard.gsic.rcp26.05[i2100],4),'-',1000*signif(standard.gsic.rcp26.95[i2100],4),') &',
+                           # 1000*signif(gsic.rcp45.50[i2100],4),' (',1000*signif(gsic.rcp45.05[i2100],4),'-',1000*signif(gsic.rcp45.95[i2100],4),') &',
+                           # 1000*signif(gsic.rcp85.50[i2100],4),' (',1000*signif(gsic.rcp85.05[i2100],4),'-',1000*signif(gsic.rcp85.95[i2100],4),') \\',
+                           sep='')
+          row.te = paste('Thermal expansion &',
+                         1000*signif(standard.te.rcp26.50[i2100],4),' (',1000*signif(standard.te.rcp26.05[i2100],4),'-',1000*signif(standard.te.rcp26.95[i2100],4),') &',
+                         # 1000*signif(te.rcp45.50[i2100],4),' (',1000*signif(te.rcp45.05[i2100],4),'-',1000*signif(te.rcp45.95[i2100],4),') &',
+                         # 1000*signif(te.rcp85.50[i2100],4),' (',1000*signif(te.rcp85.05[i2100],4),'-',1000*signif(te.rcp85.95[i2100],4),') \\',
+                         sep='')
+          row.gis = paste('Greenland Ice Sheet &',
+                          1000*signif(standard.gis.rcp26.50[i2100],4),' (',1000*signif(standard.gis.rcp26.05[i2100],4),'-',1000*signif(standard.gis.rcp26.95[i2100],4),') &',
+                          # 1000*signif(gis.rcp45.50[i2100],4),' (',1000*signif(gis.rcp45.05[i2100],4),'-',1000*signif(gis.rcp45.95[i2100],4),') &',
+                          # 1000*signif(gis.rcp85.50[i2100],4),' (',1000*signif(gis.rcp85.05[i2100],4),'-',1000*signif(gis.rcp85.95[i2100],4),') \\',
+                          sep='')
+          row.ais = paste('Antarctic Ice Sheet &',
+                          1000*signif(standard.ais.rcp26.50[i2100],4),' (',1000*signif(standard.ais.rcp26.05[i2100],4),'-',1000*signif(standard.ais.rcp26.95[i2100],4),') &',
+                          # 1000*signif(ais.rcp45.50[i2100],4),' (',1000*signif(ais.rcp45.05[i2100],4),'-',1000*signif(ais.rcp45.95[i2100],4),') &',
+                          # 1000*signif(ais.rcp85.50[i2100],4),' (',1000*signif(ais.rcp85.05[i2100],4),'-',1000*signif(ais.rcp85.95[i2100],4),') \\',
+                          sep='')
+          row.slr = paste('Total sea level &',
+                          1000*signif(standard.slr.rcp26.50[i2100],4),' (',1000*signif(standard.slr.rcp26.05[i2100],4),'-',1000*signif(standard.slr.rcp26.95[i2100],4),') &',
+                          # 1000*signif(slr.rcp45.50[i2100],4),' (',1000*signif(slr.rcp45.05[i2100],4),'-',1000*signif(slr.rcp45.95[i2100],4),') &',
+                          # 1000*signif(slr.rcp85.50[i2100],4),' (',1000*signif(slr.rcp85.05[i2100],4),'-',1000*signif(slr.rcp85.95[i2100],4),') \\',
+                          sep='')
+          
+          # pdf(paste(plotdir,'projections_SLR_total.pdf',sep=''),width=3.5,height=2.45,colormodel='cmyk')
+          # par(mfrow=c(1,1))
+          # # RCP85
+          # par(mai=c(.65,.65,.20,.2))
+          # plot(t.proj[iproj],slr.rcp85.50[iproj],type='l',col=rgb(col85[1],col85[2],col85[3]),lwd=2, ann=FALSE,
+          #      xlim=c(2000,2100), ylim=c(0,2), xaxt='n', yaxt='n', xaxs='i', yaxs='i');
+          # axis(1, seq(2000,2100,by=20)); axis(2, seq(0,2,by=.25), lab=c('0','','0.5','','1','','1.5','','2'));
+          # mtext(side=2, text='Global mean sea level [m]', line=2.2, cex=1);
+          # mtext(side=1, text='Year', line=2.2, cex=1);
+          # polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(slr.rcp85.95[iproj],rev(slr.rcp85.05[iproj])),
+          #         col=rgb(col85[1],col85[2],col85[3],.5), border=NA);
+          # # + UNIFORM RCP45
+          # lines(t.proj[iproj],slr.rcp45.50[iproj],type='l',col=rgb(col45[1],col45[2],col45[3]),lwd=2);
+          # polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(slr.rcp45.95[iproj],rev(slr.rcp45.05[iproj])),
+          #         col=rgb(col45[1],col45[2],col45[3],.5), border=NA);
+          # # + UNIFORM RCP26
+          # lines(t.proj[iproj],standard.slr.rcp26.50[iproj],type='l',col=rgb(col26[1],col26[2],col26[3]),lwd=2);
+          # polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(standard.slr.rcp26.95[iproj],rev(standard.slr.rcp26.05[iproj])),
+          #         col=rgb(col26[1],col26[2],col26[3],.5), border=NA);
+          # # + legend
+          # legend(t.proj[iproj[1]],2,c("5-95% range,","RCP2.6","RCP4.5","RCP8.5"),
+          #        lty=c(NA,1,1,1), lwd=3, bty='n', cex=1,
+          #        col=c(NA , rgb(col26[1],col26[2],col26[3]) ,
+          #              rgb(col45[1],col45[2],col45[3]) , rgb(col85[1],col85[2],col85[3])))
+          # 
+          # dev.off()
+}
 
 # pdf(paste(plotdir,'projections_SLR_total_with_noise_and_normalization.pdf',sep=''),width=3.5,height=2.45,colormodel='cmyk')
-png(paste(plotdir,'complete_projections.png',sep=''), width=866, height=516, units ="px")
+png(paste(plotdir,'standard_projections.png',sep=''), width=866, height=516, units ="px")
 
 par(mfrow=c(1,1))
 # RCP85
 par(mai=c(.65,.65,.20,.2))
-plot(t.proj[iproj],slr.rcp26.50[iproj],type='l',col=rgb(col26[1],col26[2],col26[3]),lwd=2, #ann='',
+plot(t.proj[iproj],standard.slr.rcp26.50[iproj],type='l',col=rgb(col26[1],col26[2],col26[3]),lwd=2, #ann=FALSE,
      xlim=c(2000,2100), ylim=c(0,3), 
      xaxt='n', yaxt='n', xaxs='i', yaxs='i'
      );
@@ -678,8 +869,8 @@ mtext(side=1, text='Year', line=2.2, cex=1);
 # polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(slr.rcp45.95[iproj],rev(slr.rcp45.05[iproj])),
 #         col=rgb(col45[1],col45[2],col45[3],.5), border=NA);
 # + UNIFORM RCP26
-# lines(t.proj[iproj],slr.rcp26.50[iproj],type='l',col=rgb(col26[1],col26[2],col26[3]),lwd=2);
-polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(slr.rcp26.95[iproj],rev(slr.rcp26.05[iproj])),
+# lines(t.proj[iproj],standard.slr.rcp26.50[iproj],type='l',col=rgb(col26[1],col26[2],col26[3]),lwd=2);
+polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(standard.slr.rcp26.95[iproj],rev(standard.slr.rcp26.05[iproj])),
         col=rgb(col26[1],col26[2],col26[3],.5), border=NA);
 # + legend
 legend(
@@ -695,20 +886,879 @@ dev.off()
 ##==============================================================================
 ##==============================================================================
 
+
+
+
+
 ##==============================================================================
 ##==============================================================================
-# PDF of SLR at 2100
-# sl.2100 <- proj.rcp26$slr[,251]
-# sl.2100.density <- density(sl.2100)
-# 
-# plot(sl.2100.density$x,sl.2100.density$y,
-#      type="l",xlab="Global mean sea level at 2100 [m]", ylab='PDF', lwd=2, col="black"
-#      , yaxt='n'
-#      )
-# 
-# legend(x="topright",legend="Standard priors combined with expert assessment",
-#        lty=1, lwd=2, col="black"
-#        )
+## Supplemental Figure
+## Combined hindcasts and projections for Greenland, Antarctica, and Total SLR
+
+## mycol colors, by row:
+# 1 black
+# 2 dark blue
+# 3 aqua
+# 4 pink
+# 5 light orange
+# 6 purple
+# 7 blue
+# 8 light purple
+# 9 light blue
+# 10 very light blue
+# 11 dark red
+# 12 brown
+# 13 dark orange
+# 14 neon green
+# 15 neon yellow
+
+col_priors <- 2
+col_experts <- 2
+col_standard <- 2
+col_complete <- 2
+col_obs <- 11
+col_density <- 1
+opacity <- 0.5
+
+# dev.off()
+if(TRUE){
+# >>> GIS <<< ###################################################################################################
+layout(cbind(c(1,4,7,10,13),c(2,5,8,11,13), c(3,6,9,12,13)))
+par(mai=c(.5,.7,.3,.2)) #c(bottom, left, top, right) 
+# omi = c(0,0,0,2) #for right side space
+
+# priors #######################################
+
+# plot hindcasts 
+plot(mod.time, priors.gis.50, type='l', # median
+     col=rgb(mycol[col_priors,1],mycol[col_priors,2],mycol[col_priors,3]), lwd=2, xlab='',
+     ylab='', xlim=c(1950,2016), ylim=c(-.003,.01), cex.lab=1.2, cex.axis=1.2);
+mtext(side=1, text='Year', line=2.3, cex=.9);
+# mtext(side=2, text='Greenland Ice Sheet\n[m SLE]', line=2.3, cex=.9);
+mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+mtext(side=3, text=expression(bold(' a) Prior Hindcasts')), line=.25, cex=.9, adj=0);
+
+polygon(c(mod.time,rev(mod.time)), c(priors.gis.95,rev(priors.gis.05)), # polygon
+        col=rgb(mycol[col_priors,1],mycol[col_priors,2],mycol[col_priors,3],opacity), border=NA);
+
+# observations
+# lines(obs.gis.time, obs.gis.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
+points(obs.gis.time, obs.gis.norm, pch=20, 
+       col=rgb(mycol[col_obs,1],mycol[col_obs,2],mycol[col_obs,3]));
+# lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
+abline(h=0,col="black",lty=2)
+
+# plot priors projections
+plot(t.proj[iproj],priors.gis.rcp26.50[iproj],type='l', ann=FALSE, # median
+     col=rgb(mycol[col_priors,1],mycol[col_priors,2],mycol[col_priors,3]),lwd=2,
+     xlim=c(2000,2100), ylim=c(-1,3), 
+     xaxt='n', yaxt='n', xaxs='i', yaxs='i'
+);
+axis(1, seq(2000,2100,by=20)); 
+# axis(2, seq(0,3,by=.5), lab=c('0','','1','','2','','3'));
+axis(2, seq(-1,3,by=1), lab=c('-1','','1','','3'));
+mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+mtext(side=1, text='Year', line=2.3, cex=.9);
+mtext(side=3, text=expression(bold(' b) Prior Projections')), line=.25, cex=.9, adj=0);
+
+polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(priors.gis.rcp26.95[iproj],rev(priors.gis.rcp26.05[iproj])),
+        col=rgb(mycol[col_priors,1],mycol[col_priors,2],mycol[col_priors,3],opacity), border=NA);
+abline(h=0,col="black",lty=2)
+
+# plot densities
+plot(x=priors.density.gis.2100$y,
+     y=priors.density.gis.2100$x,
+     xaxt='n', yaxt='n', xaxs='i', yaxs='i',
+     ylim=c(-1,3),
+     xlim=c(0,1.45),
+     type="n",
+     ann=FALSE,
+     # xlab='Probability density',
+     # ylab='[m SLE]', 
+     lwd=2, col=rgb(mycol[col_priors,1],mycol[col_priors,2],mycol[col_priors,3]), 
+     xaxt='n')
+axis(2, seq(-1,3,by=1), lab=c('-1','','1','','3'));
+mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+mtext(side=1, text='Probability density', line=2.3, cex=.9);
+mtext(side=3, text=expression(bold(' c) Prior SLR at 2100')), line=.25, cex=.9, adj=0);
+polygon(x=c(rep(0,length(priors.density.gis.2100$x)),rev(priors.density.gis.2100$y)),
+        y=c(priors.density.gis.2100$x,rev(priors.density.gis.2100$x)),
+        col=rgb(mycol[col_density,1],mycol[col_density,2],mycol[col_density,3],opacity)#,
+        # border=NA
+)
+abline(h=0,col="black",lty=2)
+    
+# experts #######################################
+    
+# plot hindcasts 
+plot(mod.time, experts.gis.50, type='l', # median
+     col=rgb(mycol[col_experts,1],mycol[col_experts,2],mycol[col_experts,3]), lwd=2, xlab='',
+     ylab='', xlim=c(1950,2016), ylim=c(-.003,.01), cex.lab=1.2, cex.axis=1.2);
+mtext(side=1, text='Year', line=2.3, cex=.9);
+# mtext(side=2, text='Greenland Ice Sheet\n[m SLE]', line=2.3, cex=.9);
+mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+mtext(side=3, text=expression(bold(' d) Expert Hindcasts')), line=.25, cex=.9, adj=0);
+
+polygon(c(mod.time,rev(mod.time)), c(experts.gis.95,rev(experts.gis.05)), # polygon
+        col=rgb(mycol[col_experts,1],mycol[col_experts,2],mycol[col_experts,3],opacity), border=NA);
+
+# observations
+# lines(obs.gis.time, obs.gis.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
+points(obs.gis.time, obs.gis.norm, pch=20, 
+       col=rgb(mycol[col_obs,1],mycol[col_obs,2],mycol[col_obs,3]));
+# lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
+abline(h=0,col="black",lty=2)
+
+# plot experts projections
+plot(t.proj[iproj],experts.gis.rcp26.50[iproj],type='l', ann=FALSE, # median
+     col=rgb(mycol[col_experts,1],mycol[col_experts,2],mycol[col_experts,3]),lwd=2,
+     xlim=c(2000,2100), ylim=c(-1,3), 
+     xaxt='n', yaxt='n', xaxs='i', yaxs='i'
+);
+axis(1, seq(2000,2100,by=20)); 
+# axis(2, seq(0,3,by=.5), lab=c('0','','1','','2','','3'));
+axis(2, seq(-1,3,by=1), lab=c('-1','','1','','3'));
+mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+mtext(side=1, text='Year', line=2.3, cex=.9);
+mtext(side=3, text=expression(bold(' e) Expert Projections')), line=.25, cex=.9, adj=0);
+
+polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(experts.gis.rcp26.95[iproj],rev(experts.gis.rcp26.05[iproj])),
+        col=rgb(mycol[col_experts,1],mycol[col_experts,2],mycol[col_experts,3],opacity), border=NA);
+abline(h=0,col="black",lty=2)
+
+# plot densities
+plot(x=experts.density.gis.2100$y,
+     y=experts.density.gis.2100$x,
+     xaxt='n', yaxt='n', xaxs='i', yaxs='i',
+     ylim=c(-1,3),
+     xlim=c(0,1.45),
+     type="n",
+     ann=FALSE,
+     # xlab='Probability density',
+     # ylab='[m SLE]', 
+     lwd=2, col=rgb(mycol[col_experts,1],mycol[col_experts,2],mycol[col_experts,3]), 
+     xaxt='n')
+axis(2, seq(-1,3,by=1), lab=c('-1','','1','','3'));
+mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+mtext(side=1, text='Probability density', line=2.3, cex=.9);
+mtext(side=3, text=expression(bold(' f) Expert SLR at 2100')), line=.25, cex=.9, adj=0);
+polygon(x=c(rep(0,length(experts.density.gis.2100$x)),rev(experts.density.gis.2100$y)),
+        y=c(experts.density.gis.2100$x,rev(experts.density.gis.2100$x)),
+        col=rgb(mycol[col_density,1],mycol[col_density,2],mycol[col_density,3],opacity)#,
+        # border=NA
+)
+abline(h=0,col="black",lty=2)
+
+# standard #######################################
+
+# plot hindcasts 
+plot(mod.time, standard.gis.50, type='l', # median
+     col=rgb(mycol[col_standard,1],mycol[col_standard,2],mycol[col_standard,3]), lwd=2, xlab='',
+     ylab='', xlim=c(1950,2016), ylim=c(-.003,.01), cex.lab=1.2, cex.axis=1.2);
+mtext(side=1, text='Year', line=2.3, cex=.9);
+# mtext(side=2, text='Greenland Ice Sheet\n[m SLE]', line=2.3, cex=.9);
+mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+mtext(side=3, text=expression(bold(' g) Standard Hindcasts')), line=.25, cex=.9, adj=0);
+
+polygon(c(mod.time,rev(mod.time)), c(standard.gis.95,rev(standard.gis.05)), # polygon
+        col=rgb(mycol[col_standard,1],mycol[col_standard,2],mycol[col_standard,3],opacity), border=NA);
+
+# observations
+# lines(obs.gis.time, obs.gis.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
+points(obs.gis.time, obs.gis.norm, pch=20, 
+       col=rgb(mycol[col_obs,1],mycol[col_obs,2],mycol[col_obs,3]));
+# lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
+abline(h=0,col="black",lty=2)
+
+# plot standard projections
+plot(t.proj[iproj],standard.gis.rcp26.50[iproj],type='l', ann=FALSE, # median
+     col=rgb(mycol[col_standard,1],mycol[col_standard,2],mycol[col_standard,3]),lwd=2,
+     xlim=c(2000,2100), ylim=c(-1,3), 
+     xaxt='n', yaxt='n', xaxs='i', yaxs='i'
+);
+axis(1, seq(2000,2100,by=20)); 
+# axis(2, seq(0,3,by=.5), lab=c('0','','1','','2','','3'));
+axis(2, seq(-1,3,by=1), lab=c('-1','','1','','3'));
+mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+mtext(side=1, text='Year', line=2.3, cex=.9);
+mtext(side=3, text=expression(bold(' h) Standard Projections')), line=.25, cex=.9, adj=0);
+
+polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(standard.gis.rcp26.95[iproj],rev(standard.gis.rcp26.05[iproj])),
+        col=rgb(mycol[col_standard,1],mycol[col_standard,2],mycol[col_standard,3],opacity), border=NA);
+abline(h=0,col="black",lty=2)
+
+# plot densities
+plot(x=standard.density.gis.2100$y,
+     y=standard.density.gis.2100$x,
+     xaxt='n', yaxt='n', xaxs='i', yaxs='i',
+     ylim=c(-1,3),
+     xlim=c(0,1.45),
+     type="n",
+     ann=FALSE,
+     # xlab='Probability density',
+     # ylab='[m SLE]', 
+     lwd=2, col=rgb(mycol[col_standard,1],mycol[col_standard,2],mycol[col_standard,3]), 
+     xaxt='n')
+axis(2, seq(-1,3,by=1), lab=c('-1','','1','','3'));
+mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+mtext(side=1, text='Probability density', line=2.3, cex=.9);
+mtext(side=3, text=expression(bold(' i) Standard SLR at 2100')), line=.25, cex=.9, adj=0);
+polygon(x=c(rep(0,length(standard.density.gis.2100$x)),rev(standard.density.gis.2100$y)),
+        y=c(standard.density.gis.2100$x,rev(standard.density.gis.2100$x)),
+        col=rgb(mycol[col_density,1],mycol[col_density,2],mycol[col_density,3],opacity)#,
+        # border=NA
+)
+abline(h=0,col="black",lty=2)
+
+# complete #######################################
+
+# plot hindcasts 
+plot(mod.time, complete.gis.50, type='l', # median
+     col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3]), lwd=2, xlab='',
+     ylab='', xlim=c(1950,2016), ylim=c(-.003,.01), cex.lab=1.2, cex.axis=1.2);
+mtext(side=1, text='Year', line=2.3, cex=.9);
+# mtext(side=2, text='Greenland Ice Sheet\n[m SLE]', line=2.3, cex=.9);
+mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+mtext(side=3, text=expression(bold(' j) Complete Hindcasts')), line=.25, cex=.9, adj=0);
+
+polygon(c(mod.time,rev(mod.time)), c(complete.gis.95,rev(complete.gis.05)), # polygon
+        col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3],opacity), border=NA);
+
+# observations
+# lines(obs.gis.time, obs.gis.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
+points(obs.gis.time, obs.gis.norm, pch=20, 
+       col=rgb(mycol[col_obs,1],mycol[col_obs,2],mycol[col_obs,3]));
+# lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
+abline(h=0,col="black",lty=2)
+
+# plot complete projections
+plot(t.proj[iproj],complete.gis.rcp26.50[iproj],type='l', ann=FALSE, # median
+     col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3]),lwd=2,
+     xlim=c(2000,2100), ylim=c(-1,3), 
+     xaxt='n', yaxt='n', xaxs='i', yaxs='i'
+);
+axis(1, seq(2000,2100,by=20)); 
+# axis(2, seq(0,3,by=.5), lab=c('0','','1','','2','','3'));
+axis(2, seq(-1,3,by=1), lab=c('-1','','1','','3'));
+mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+mtext(side=1, text='Year', line=2.3, cex=.9);
+mtext(side=3, text=expression(bold(' k) Complete Projections')), line=.25, cex=.9, adj=0);
+
+polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(complete.gis.rcp26.95[iproj],rev(complete.gis.rcp26.05[iproj])),
+        col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3],opacity), border=NA);
+abline(h=0,col="black",lty=2)
+
+# plot densities
+plot(x=complete.density.gis.2100$y,
+     y=complete.density.gis.2100$x,
+     xaxt='n', yaxt='n', xaxs='i', yaxs='i',
+     ylim=c(-1,3),
+     xlim=c(0,1.45),
+     type="n",
+     ann=FALSE,
+     # xlab='Probability density',
+     # ylab='[m SLE]', 
+     lwd=2, col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3]), 
+     xaxt='n')
+axis(2, seq(-1,3,by=1), lab=c('-1','','1','','3'));
+mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+mtext(side=1, text='Probability density', line=2.3, cex=.9);
+mtext(side=3, text=expression(bold(' l) Complete SLR at 2100')), line=.25, cex=.9, adj=0);
+polygon(x=c(rep(0,length(complete.density.gis.2100$x)),rev(complete.density.gis.2100$y)),
+        y=c(complete.density.gis.2100$x,rev(complete.density.gis.2100$x)),
+        col=rgb(mycol[col_density,1],mycol[col_density,2],mycol[col_density,3],opacity)#,
+        # border=NA
+)
+abline(h=0,col="black",lty=2)
+
+# LEGEND
+plot(1, type = "n", axes=FALSE, xlab="", ylab="")
+legend(x = "top",inset = 0,
+       legend = c("median, model" ,
+                  "5-95% range, model",
+                  "observations"#,
+                  # "Probability density"
+                  # "2-sigma range, observations"
+                  ),
+       # fill=c(rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3])),
+       lwd=c(2,8,NA#,
+             #8
+             ), bty='n', cex=1.2,
+       pch=c(NA,NA,20,NA),
+       col=c(rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]),
+             rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5),
+             rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3])#,
+             # rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3])
+             # rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.7)
+       ), 
+       horiz = FALSE)
+}
+##==============================================================================
+##==============================================================================
+
+if(TRUE){
+  # >>> Antarctica <<< ###################################################################################################
+  layout(cbind(c(1,4,7,10,13),c(2,5,8,11,13), c(3,6,9,12,13)))
+  par(mai=c(.5,.7,.3,.2)) #c(bottom, left, top, right) 
+  # omi = c(0,0,0,2) #for right side space
+  
+  # priors #######################################
+  
+  # plot hindcasts 
+  ipaleo=which(t.paleo==-149999):which(t.paleo==1)
+  plot(t.paleo[ipaleo], priors.ais.paleo.50[ipaleo], type='l', 
+       col=rgb(mycol[col_priors,1],mycol[col_priors,2],mycol[col_priors,3]), lwd=2, xlab='',
+       ylab='', xlim=c(t.paleo[ipaleo[1]],t.paleo[ipaleo[length(ipaleo)]]),
+       # ylim=c(-20,10),
+       ylim=c(-20,16),
+       cex.lab=1.2, cex.axis=1.2);
+  mtext(side=1, text='Year [before present]', line=2.3, cex=.9);
+  # mtext(side=2, text='Antarctic Ice Sheet\n[m SLE]', line=2.3, cex=.9);
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' a) Prior Hindcasts')), line=.25, cex=.9, adj=0);
+  polygon(c(t.paleo[ipaleo],rev(t.paleo[ipaleo])), c(priors.ais.paleo.95[ipaleo],rev(priors.ais.paleo.05[ipaleo])), 
+          col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3],opacity), border=NA);
+  for (i in 1:3) {
+    polygon(c( date[c(obs.years[i]-1000,obs.years[i]+1000)], rev(date[c(obs.years[i]-1000,obs.years[i]+1000)]) ),
+            c( c(windows[i,2],windows[i,2])                , rev(c(windows[i,1],windows[i,1]))                 ),
+            col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.7), border=NA);
+  }
+  i=4; points(date[obs.years[i]],mean(windows[i,]),pch=15,col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]))
+  # lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
+  abline(h=0,col="black",lty=2)
+  
+  # plot priors projections
+  plot(t.proj[iproj],priors.ais.rcp26.50[iproj],type='l', ann=FALSE, # median
+       col=rgb(mycol[col_priors,1],mycol[col_priors,2],mycol[col_priors,3]),lwd=2,
+       xlim=c(2000,2100), ylim=c(-2,2), 
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i'
+  );
+  axis(1, seq(2000,2100,by=20)); 
+  # axis(2, seq(0,3,by=.5), lab=c('0','','1','','2','','3'));
+  axis(2, seq(-2,2,by=1), lab=c('-2','','0','','2'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Year', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' b) Prior Projections')), line=.25, cex=.9, adj=0);
+  
+  polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(priors.ais.rcp26.95[iproj],rev(priors.ais.rcp26.05[iproj])),
+          col=rgb(mycol[col_priors,1],mycol[col_priors,2],mycol[col_priors,3],opacity), border=NA);
+  abline(h=0,col="black",lty=2)
+  
+  # plot densities
+  plot(x=priors.density.ais.2100$y,
+       y=priors.density.ais.2100$x,
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i',
+       ylim=c(-2,2),
+       xlim=c(0,4.35),
+       type="n",
+       ann=FALSE,
+       # xlab='Probability density',
+       # ylab='[m SLE]', 
+       lwd=2, col=rgb(mycol[col_priors,1],mycol[col_priors,2],mycol[col_priors,3]), 
+       xaxt='n')
+  axis(2, seq(-2,2,by=1), lab=c('-2','','0','','2'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Probability density', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' c) Prior SLR at 2100')), line=.25, cex=.9, adj=0);
+  polygon(x=c(rep(0,length(priors.density.ais.2100$x)),rev(priors.density.ais.2100$y)),
+          y=c(priors.density.ais.2100$x,rev(priors.density.ais.2100$x)),
+          col=rgb(mycol[col_density,1],mycol[col_density,2],mycol[col_density,3],opacity)#,
+          # border=NA
+  )
+  abline(h=0,col="black",lty=2)
+  
+  # experts #######################################
+  
+  # plot hindcasts 
+  ipaleo=which(t.paleo==-149999):which(t.paleo==1)
+  plot(t.paleo[ipaleo], experts.ais.paleo.50[ipaleo], type='l', 
+       col=rgb(mycol[col_standard,1],mycol[col_standard,2],mycol[col_standard,3]), lwd=2, xlab='',
+       ylab='', xlim=c(t.paleo[ipaleo[1]],t.paleo[ipaleo[length(ipaleo)]]),
+       # ylim=c(-20,10),
+       ylim=c(-20,16),
+       cex.lab=1.2, cex.axis=1.2);
+  mtext(side=1, text='Year [before present]', line=2.3, cex=.9);
+  # mtext(side=2, text='Antarctic Ice Sheet\n[m SLE]', line=2.3, cex=.9);
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' d) Expert Hindcasts')), line=.25, cex=.9, adj=0);
+  polygon(c(t.paleo[ipaleo],rev(t.paleo[ipaleo])), c(experts.ais.paleo.95[ipaleo],rev(experts.ais.paleo.05[ipaleo])), 
+          col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3],opacity), border=NA);
+  for (i in 1:3) {
+    polygon(c( date[c(obs.years[i]-1000,obs.years[i]+1000)], rev(date[c(obs.years[i]-1000,obs.years[i]+1000)]) ),
+            c( c(windows[i,2],windows[i,2])                , rev(c(windows[i,1],windows[i,1]))                 ),
+            col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.7), border=NA);
+  }
+  i=4; points(date[obs.years[i]],mean(windows[i,]),pch=15,col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]))
+  # lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
+  abline(h=0,col="black",lty=2)
+  
+  # plot experts projections
+  plot(t.proj[iproj],experts.ais.rcp26.50[iproj],type='l', ann=FALSE, # median
+       col=rgb(mycol[col_experts,1],mycol[col_experts,2],mycol[col_experts,3]),lwd=2,
+       xlim=c(2000,2100), ylim=c(-2,2), 
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i'
+  );
+  axis(1, seq(2000,2100,by=20)); 
+  # axis(2, seq(0,3,by=.5), lab=c('0','','1','','2','','3'));
+  axis(2, seq(-2,2,by=1), lab=c('-2','','0','','2'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Year', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' e) Expert Projections')), line=.25, cex=.9, adj=0);
+  
+  polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(experts.ais.rcp26.95[iproj],rev(experts.ais.rcp26.05[iproj])),
+          col=rgb(mycol[col_experts,1],mycol[col_experts,2],mycol[col_experts,3],opacity), border=NA);
+  abline(h=0,col="black",lty=2)
+  
+  # plot densities
+  plot(x=experts.density.ais.2100$y,
+       y=experts.density.ais.2100$x,
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i',
+       ylim=c(-2,2),
+       xlim=c(0,4.35),
+       type="n",
+       ann=FALSE,
+       # xlab='Probability density',
+       # ylab='[m SLE]', 
+       lwd=2, col=rgb(mycol[col_experts,1],mycol[col_experts,2],mycol[col_experts,3]), 
+       xaxt='n')
+  axis(2, seq(-2,2,by=1), lab=c('-2','','0','','2'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Probability density', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' f) Expert SLR at 2100')), line=.25, cex=.9, adj=0);
+  polygon(x=c(rep(0,length(experts.density.ais.2100$x)),rev(experts.density.ais.2100$y)),
+          y=c(experts.density.ais.2100$x,rev(experts.density.ais.2100$x)),
+          col=rgb(mycol[col_density,1],mycol[col_density,2],mycol[col_density,3],opacity)#,
+          # border=NA
+  )
+  abline(h=0,col="black",lty=2)
+  
+  # standard #######################################
+  
+  # plot hindcasts 
+  ipaleo=which(t.paleo==-149999):which(t.paleo==1)
+  plot(t.paleo[ipaleo], standard.ais.paleo.50[ipaleo], type='l', 
+       col=rgb(mycol[col_standard,1],mycol[col_standard,2],mycol[col_standard,3]), lwd=2, xlab='',
+       ylab='', xlim=c(t.paleo[ipaleo[1]],t.paleo[ipaleo[length(ipaleo)]]),
+       # ylim=c(-20,10),
+       ylim=c(-20,16),
+       cex.lab=1.2, cex.axis=1.2);
+  mtext(side=1, text='Year [before present]', line=2.3, cex=.9);
+  # mtext(side=2, text='Antarctic Ice Sheet\n[m SLE]', line=2.3, cex=.9);
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' g) Standard Hindcasts')), line=.25, cex=.9, adj=0);
+  polygon(c(t.paleo[ipaleo],rev(t.paleo[ipaleo])), c(standard.ais.paleo.95[ipaleo],rev(standard.ais.paleo.05[ipaleo])), 
+          col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3],opacity), border=NA);
+  for (i in 1:3) {
+    polygon(c( date[c(obs.years[i]-1000,obs.years[i]+1000)], rev(date[c(obs.years[i]-1000,obs.years[i]+1000)]) ),
+            c( c(windows[i,2],windows[i,2])                , rev(c(windows[i,1],windows[i,1]))                 ),
+            col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.7), border=NA);
+  }
+  i=4; points(date[obs.years[i]],mean(windows[i,]),pch=15,col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]))
+  # lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
+  abline(h=0,col="black",lty=2)
+  
+  # plot standard projections
+  plot(t.proj[iproj],standard.ais.rcp26.50[iproj],type='l', ann=FALSE, # median
+       col=rgb(mycol[col_standard,1],mycol[col_standard,2],mycol[col_standard,3]),lwd=2,
+       xlim=c(2000,2100), ylim=c(-2,2), 
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i'
+  );
+  axis(1, seq(2000,2100,by=20)); 
+  # axis(2, seq(0,3,by=.5), lab=c('0','','1','','2','','3'));
+  axis(2, seq(-2,2,by=1), lab=c('-2','','0','','2'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Year', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' h) Standard Projections')), line=.25, cex=.9, adj=0);
+  
+  polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(standard.ais.rcp26.95[iproj],rev(standard.ais.rcp26.05[iproj])),
+          col=rgb(mycol[col_standard,1],mycol[col_standard,2],mycol[col_standard,3],opacity), border=NA);
+  abline(h=0,col="black",lty=2)
+  
+  # plot densities
+  plot(x=standard.density.ais.2100$y,
+       y=standard.density.ais.2100$x,
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i',
+       ylim=c(-2,2),
+       xlim=c(0,4.35),
+       type="n",
+       ann=FALSE,
+       # xlab='Probability density',
+       # ylab='[m SLE]', 
+       lwd=2, col=rgb(mycol[col_standard,1],mycol[col_standard,2],mycol[col_standard,3]), 
+       xaxt='n')
+  axis(2, seq(-2,2,by=1), lab=c('-2','','0','','2'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Probability density', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' i) Standard SLR at 2100')), line=.25, cex=.9, adj=0);
+  polygon(x=c(rep(0,length(standard.density.ais.2100$x)),rev(standard.density.ais.2100$y)),
+          y=c(standard.density.ais.2100$x,rev(standard.density.ais.2100$x)),
+          col=rgb(mycol[col_density,1],mycol[col_density,2],mycol[col_density,3],opacity)#,
+          # border=NA
+  )
+  abline(h=0,col="black",lty=2)
+  
+  # complete #######################################
+  
+  # plot hindcasts 
+  ipaleo=which(t.paleo==-149999):which(t.paleo==1)
+  plot(t.paleo[ipaleo], complete.ais.paleo.50[ipaleo], type='l', 
+       col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3]), lwd=2, xlab='',
+       ylab='', xlim=c(t.paleo[ipaleo[1]],t.paleo[ipaleo[length(ipaleo)]]),
+       # ylim=c(-20,10),
+       ylim=c(-20,16),
+       cex.lab=1.2, cex.axis=1.2);
+  mtext(side=1, text='Year [before present]', line=2.3, cex=.9);
+  # mtext(side=2, text='Antarctic Ice Sheet\n[m SLE]', line=2.3, cex=.9);
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' j) Complete Hindcasts')), line=.25, cex=.9, adj=0);
+  polygon(c(t.paleo[ipaleo],rev(t.paleo[ipaleo])), c(complete.ais.paleo.95[ipaleo],rev(complete.ais.paleo.05[ipaleo])), 
+          col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3],opacity), border=NA);
+  for (i in 1:3) {
+    polygon(c( date[c(obs.years[i]-1000,obs.years[i]+1000)], rev(date[c(obs.years[i]-1000,obs.years[i]+1000)]) ),
+            c( c(windows[i,2],windows[i,2])                , rev(c(windows[i,1],windows[i,1]))                 ),
+            col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.7), border=NA);
+  }
+  i=4; points(date[obs.years[i]],mean(windows[i,]),pch=15,col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]))
+  # lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
+  abline(h=0,col="black",lty=2)
+  
+  # plot complete projections
+  plot(t.proj[iproj],complete.ais.rcp26.50[iproj],type='l', ann=FALSE, # median
+       col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3]),lwd=2,
+       xlim=c(2000,2100), ylim=c(-2,2), 
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i'
+  );
+  axis(1, seq(2000,2100,by=20)); 
+  # axis(2, seq(0,3,by=.5), lab=c('0','','1','','2','','3'));
+  axis(2, seq(-2,2,by=1), lab=c('-2','','0','','2'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Year', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' k) Complete Projections')), line=.25, cex=.9, adj=0);
+  
+  polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(complete.ais.rcp26.95[iproj],rev(complete.ais.rcp26.05[iproj])),
+          col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3],opacity), border=NA);
+  abline(h=0,col="black",lty=2)
+  
+  # plot densities
+  plot(x=complete.density.ais.2100$y,
+       y=complete.density.ais.2100$x,
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i',
+       ylim=c(-2,2),
+       xlim=c(0,4.35),
+       type="n",
+       ann=FALSE,
+       # xlab='Probability density',
+       # ylab='[m SLE]', 
+       lwd=2, col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3]), 
+       xaxt='n')
+  axis(2, seq(-2,2,by=1), lab=c('-2','','0','','2'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Probability density', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' l) Complete SLR at 2100')), line=.25, cex=.9, adj=0);
+  polygon(x=c(rep(0,length(complete.density.ais.2100$x)),rev(complete.density.ais.2100$y)),
+          y=c(complete.density.ais.2100$x,rev(complete.density.ais.2100$x)),
+          col=rgb(mycol[col_density,1],mycol[col_density,2],mycol[col_density,3],opacity)#,
+          # border=NA
+  )
+  abline(h=0,col="black",lty=2)
+  
+  
+  
+  # LEGEND
+  plot(1, type = "n", axes=FALSE, xlab="", ylab="")
+  legend(x = "top",inset = 0,
+         legend = c("median, model" ,
+                    "5-95% range, model",
+                    "observations"#,
+                    # "Probability density"
+                    # "2-sigma range, observations"
+         ),
+         # fill=c(rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3])),
+         lwd=c(2,8,NA#,
+               #8
+         ), bty='n', cex=1.2,
+         pch=c(NA,NA,20,NA),
+         col=c(rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]),
+               rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5),
+               rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3])#,
+               # rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3])
+               # rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.7)
+         ), 
+         horiz = FALSE)
+}
+##==============================================================================
+##==============================================================================
+
+if(TRUE){
+  # >>> Total Sea Level <<< ###################################################################################################
+  n.sig = 2         # how many sigma to plot around the obs?
+  layout(cbind(c(1,4,7,10,13),c(2,5,8,11,13), c(3,6,9,12,13)))
+  par(mai=c(.5,.7,.3,.2)) #c(bottom, left, top, right) 
+  # omi = c(0,0,0,2) #for right side space
+  
+  # priors #######################################
+  
+  # plot hindcasts 
+  plot(mod.time, priors.slr.50, type='l', 
+       col=rgb(mycol[col_priors,1],mycol[col_priors,2],mycol[col_priors,3]), lwd=2, xlab='',
+       ylab='', xlim=c(1850,2016), ylim=c(-.3,.2), cex.lab=1.2, cex.axis=1.2);
+  mtext(side=1, text='Year', line=2.3, cex=.9);
+  # mtext(side=2, text='Total sea level [m]', line=2.3, cex=.9);
+  mtext(side=2, text='[m]', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' a) Priors Hindcasts')), line=.25, cex=.9, adj=0);
+  polygon(c(mod.time,rev(mod.time)), c(priors.slr.95,rev(priors.slr.05)), 
+          col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+  # lines(obs.sl.time, obs.sl.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
+  points(obs.sl.time, obs.sl.norm,pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
+  # lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
+  polygon(c(obs.sl.time,rev(obs.sl.time)), c(obs.sl.norm+n.sig*obs.sl.err,rev(obs.sl.norm-n.sig*obs.sl.err)),
+          col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
+  abline(h=0,col="black",lty=2)
+  
+  # plot priors projections
+  plot(t.proj[iproj],priors.slr.rcp26.50[iproj],type='l', ann=FALSE, # median
+       col=rgb(mycol[col_priors,1],mycol[col_priors,2],mycol[col_priors,3]),lwd=2,
+       xlim=c(2000,2100), ylim=c(0,4), 
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i'
+  );
+  axis(1, seq(2000,2100,by=20)); 
+  # axis(2, seq(0,3,by=.5), lab=c('0','','1','','2','','3'));
+  axis(2, seq(0,4,by=1), lab=c('0','','2','','4'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Year', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' b) Prior Projections')), line=.25, cex=.9, adj=0);
+  
+  polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(priors.slr.rcp26.95[iproj],rev(priors.slr.rcp26.05[iproj])),
+          col=rgb(mycol[col_priors,1],mycol[col_priors,2],mycol[col_priors,3],opacity), border=NA);
+  abline(h=0,col="black",lty=2)
+  
+  # plot densities
+  plot(x=priors.density.2100$y,
+       y=priors.density.2100$x,
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i',
+       ylim=c(0,4),
+       xlim=c(0,4.35),
+       type="n",
+       ann=FALSE,
+       # xlab='Probability density',
+       # ylab='[m SLE]', 
+       lwd=2, col=rgb(mycol[col_priors,1],mycol[col_priors,2],mycol[col_priors,3]), 
+       xaxt='n')
+  axis(2, seq(0,4,by=1), lab=c('0','','2','','4'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Probability density', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' c) Prior SLR at 2100')), line=.25, cex=.9, adj=0);
+  polygon(x=c(rep(0,length(priors.density.2100$x)),rev(priors.density.2100$y)),
+          y=c(priors.density.2100$x,rev(priors.density.2100$x)),
+          col=rgb(mycol[col_density,1],mycol[col_density,2],mycol[col_density,3],opacity)#,
+          # border=NA
+  )
+  abline(h=0,col="black",lty=2)
+  
+  # experts #######################################
+  
+  # plot hindcasts 
+  plot(mod.time, experts.slr.50, type='l', 
+       col=rgb(mycol[col_experts,1],mycol[col_experts,2],mycol[col_experts,3]), lwd=2, xlab='',
+       ylab='', xlim=c(1850,2016), ylim=c(-.3,.2), cex.lab=1.2, cex.axis=1.2);
+  mtext(side=1, text='Year', line=2.3, cex=.9);
+  # mtext(side=2, text='Total sea level [m]', line=2.3, cex=.9);
+  mtext(side=2, text='[m]', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' d) Expert Hindcasts')), line=.25, cex=.9, adj=0);
+  polygon(c(mod.time,rev(mod.time)), c(experts.slr.95,rev(experts.slr.05)), 
+          col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+  # lines(obs.sl.time, obs.sl.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
+  points(obs.sl.time, obs.sl.norm,pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
+  # lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
+  polygon(c(obs.sl.time,rev(obs.sl.time)), c(obs.sl.norm+n.sig*obs.sl.err,rev(obs.sl.norm-n.sig*obs.sl.err)),
+          col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
+  abline(h=0,col="black",lty=2)
+  
+  # plot experts projections
+  plot(t.proj[iproj],experts.slr.rcp26.50[iproj],type='l', ann=FALSE, # median
+       col=rgb(mycol[col_experts,1],mycol[col_experts,2],mycol[col_experts,3]),lwd=2,
+       xlim=c(2000,2100), ylim=c(0,4), 
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i'
+  );
+  axis(1, seq(2000,2100,by=20)); 
+  # axis(2, seq(0,3,by=.5), lab=c('0','','1','','2','','3'));
+  axis(2, seq(0,4,by=1), lab=c('0','','2','','4'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Year', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' e) Expert Projections')), line=.25, cex=.9, adj=0);
+  
+  polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(experts.slr.rcp26.95[iproj],rev(experts.slr.rcp26.05[iproj])),
+          col=rgb(mycol[col_experts,1],mycol[col_experts,2],mycol[col_experts,3],opacity), border=NA);
+  abline(h=0,col="black",lty=2)
+  
+  # plot densities
+  plot(x=experts.density.2100$y,
+       y=experts.density.2100$x,
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i',
+       ylim=c(0,4),
+       xlim=c(0,4.35),
+       type="n",
+       ann=FALSE,
+       # xlab='Probability density',
+       # ylab='[m SLE]', 
+       lwd=2, col=rgb(mycol[col_experts,1],mycol[col_experts,2],mycol[col_experts,3]), 
+       xaxt='n')
+  axis(2, seq(0,4,by=1), lab=c('0','','2','','4'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Probability density', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' f) Expert SLR at 2100')), line=.25, cex=.9, adj=0);
+  polygon(x=c(rep(0,length(experts.density.2100$x)),rev(experts.density.2100$y)),
+          y=c(experts.density.2100$x,rev(experts.density.2100$x)),
+          col=rgb(mycol[col_density,1],mycol[col_density,2],mycol[col_density,3],opacity)#,
+          # border=NA
+  )
+  abline(h=0,col="black",lty=2)
+  
+  # standard #######################################
+  
+  # plot hindcasts 
+  plot(mod.time, standard.slr.50, type='l', 
+       col=rgb(mycol[col_standard,1],mycol[col_standard,2],mycol[col_standard,3]), lwd=2, xlab='',
+       ylab='', xlim=c(1850,2016), ylim=c(-.3,.2), cex.lab=1.2, cex.axis=1.2);
+  mtext(side=1, text='Year', line=2.3, cex=.9);
+  # mtext(side=2, text='Total sea level [m]', line=2.3, cex=.9);
+  mtext(side=2, text='[m]', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' g) Standard Hindcasts')), line=.25, cex=.9, adj=0);
+  polygon(c(mod.time,rev(mod.time)), c(standard.slr.95,rev(standard.slr.05)), 
+          col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+  # lines(obs.sl.time, obs.sl.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
+  points(obs.sl.time, obs.sl.norm,pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
+  # lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
+  polygon(c(obs.sl.time,rev(obs.sl.time)), c(obs.sl.norm+n.sig*obs.sl.err,rev(obs.sl.norm-n.sig*obs.sl.err)),
+          col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
+  abline(h=0,col="black",lty=2)
+  
+  # plot standard projections
+  plot(t.proj[iproj],standard.slr.rcp26.50[iproj],type='l', ann=FALSE, # median
+       col=rgb(mycol[col_standard,1],mycol[col_standard,2],mycol[col_standard,3]),lwd=2,
+       xlim=c(2000,2100), ylim=c(0,4), 
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i'
+  );
+  axis(1, seq(2000,2100,by=20)); 
+  # axis(2, seq(0,3,by=.5), lab=c('0','','1','','2','','3'));
+  axis(2, seq(0,4,by=1), lab=c('0','','2','','4'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Year', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' h) Standard Projections')), line=.25, cex=.9, adj=0);
+  
+  polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(standard.slr.rcp26.95[iproj],rev(standard.slr.rcp26.05[iproj])),
+          col=rgb(mycol[col_standard,1],mycol[col_standard,2],mycol[col_standard,3],opacity), border=NA);
+  abline(h=0,col="black",lty=2)
+  
+  # plot densities
+  plot(x=standard.density.2100$y,
+       y=standard.density.2100$x,
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i',
+       ylim=c(0,4),
+       xlim=c(0,4.35),
+       type="n",
+       ann=FALSE,
+       # xlab='Probability density',
+       # ylab='[m SLE]', 
+       lwd=2, col=rgb(mycol[col_standard,1],mycol[col_standard,2],mycol[col_standard,3]), 
+       xaxt='n')
+  axis(2, seq(0,4,by=1), lab=c('0','','2','','4'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Probability density', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' i) Standard SLR at 2100')), line=.25, cex=.9, adj=0);
+  polygon(x=c(rep(0,length(standard.density.2100$x)),rev(standard.density.2100$y)),
+          y=c(standard.density.2100$x,rev(standard.density.2100$x)),
+          col=rgb(mycol[col_density,1],mycol[col_density,2],mycol[col_density,3],opacity)#,
+          # border=NA
+  )
+  abline(h=0,col="black",lty=2)
+  
+  # complete #######################################
+  
+  # plot hindcasts 
+  plot(mod.time, complete.slr.50, type='l', 
+       col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3]), lwd=2, xlab='',
+       ylab='', xlim=c(1850,2016), ylim=c(-.3,.2), cex.lab=1.2, cex.axis=1.2);
+  mtext(side=1, text='Year', line=2.3, cex=.9);
+  # mtext(side=2, text='Total sea level [m]', line=2.3, cex=.9);
+  mtext(side=2, text='[m]', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' j) Complete Hindcasts')), line=.25, cex=.9, adj=0);
+  polygon(c(mod.time,rev(mod.time)), c(complete.slr.95,rev(complete.slr.05)), 
+          col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+  # lines(obs.sl.time, obs.sl.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
+  points(obs.sl.time, obs.sl.norm,pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
+  # lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
+  polygon(c(obs.sl.time,rev(obs.sl.time)), c(obs.sl.norm+n.sig*obs.sl.err,rev(obs.sl.norm-n.sig*obs.sl.err)),
+          col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
+  abline(h=0,col="black",lty=2) 
+  
+  
+  # plot complete projections
+  plot(t.proj[iproj],complete.slr.rcp26.50[iproj],type='l', ann=FALSE, # median
+       col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3]),lwd=2,
+       xlim=c(2000,2100), ylim=c(0,4), 
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i'
+  );
+  axis(1, seq(2000,2100,by=20)); 
+  # axis(2, seq(0,3,by=.5), lab=c('0','','1','','2','','3'));
+  axis(2, seq(0,4,by=1), lab=c('0','','2','','4'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Year', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' k) Complete Projections')), line=.25, cex=.9, adj=0);
+  
+  polygon(c(t.proj[iproj],rev(t.proj[iproj])), c(complete.slr.rcp26.95[iproj],rev(complete.slr.rcp26.05[iproj])),
+          col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3],opacity), border=NA);
+  abline(h=0,col="black",lty=2)
+  
+  # plot densities
+  plot(x=complete.density.2100$y,
+       y=complete.density.2100$x,
+       xaxt='n', yaxt='n', xaxs='i', yaxs='i',
+       ylim=c(0,4),
+       xlim=c(0,4.35),
+       type="n",
+       ann=FALSE,
+       # xlab='Probability density',
+       # ylab='[m SLE]', 
+       lwd=2, col=rgb(mycol[col_complete,1],mycol[col_complete,2],mycol[col_complete,3]), 
+       xaxt='n')
+  axis(2, seq(0,4,by=1), lab=c('0','','2','','4'));
+  mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
+  mtext(side=1, text='Probability density', line=2.3, cex=.9);
+  mtext(side=3, text=expression(bold(' l) Complete SLR at 2100')), line=.25, cex=.9, adj=0);
+  polygon(x=c(rep(0,length(complete.density.2100$x)),rev(complete.density.2100$y)),
+          y=c(complete.density.2100$x,rev(complete.density.2100$x)),
+          col=rgb(mycol[col_density,1],mycol[col_density,2],mycol[col_density,3],opacity)#,
+          # border=NA
+  )
+  abline(h=0,col="black",lty=2)
+  
+  
+  
+  # LEGEND
+  plot(1, type = "n", axes=FALSE, xlab="", ylab="")
+  legend(x = "top",inset = 0,
+         legend = c("median, model" ,
+                    "5-95% range, model",
+                    "observations"#,
+                    # "Probability density"
+                    # "2-sigma range, observations"
+         ),
+         # fill=c(rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3])),
+         lwd=c(2,8,NA#,
+               #8
+         ), bty='n', cex=1.2,
+         pch=c(NA,NA,20,NA),
+         col=c(rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]),
+               rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5),
+               rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3])#,
+               # rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3])
+               # rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.7)
+         ), 
+         horiz = FALSE)
+}
+##==============================================================================
+##==============================================================================
 
 
 ## Save workspace image
