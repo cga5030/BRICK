@@ -1511,8 +1511,8 @@ if(TRUE){
   # lines(obs.sl.time, obs.sl.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
   points(obs.sl.time, obs.sl.norm,pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
   # lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
-  polygon(c(obs.sl.time,rev(obs.sl.time)), c(obs.sl.norm+n.sig*obs.sl.err,rev(obs.sl.norm-n.sig*obs.sl.err)),
-          col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
+  # polygon(c(obs.sl.time,rev(obs.sl.time)), c(obs.sl.norm+n.sig*obs.sl.err,rev(obs.sl.norm-n.sig*obs.sl.err)),
+  #         col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
   abline(h=0,col="black",lty=2)
   
   # plot priors projections
@@ -1537,7 +1537,7 @@ if(TRUE){
        y=priors.density.2100$x,
        xaxt='n', yaxt='n', xaxs='i', yaxs='i',
        ylim=c(0,4),
-       xlim=c(0,4.35),
+       xlim=c(0,1.25),
        type="n",
        ann=FALSE,
        # xlab='Probability density',
@@ -1570,8 +1570,8 @@ if(TRUE){
   # lines(obs.sl.time, obs.sl.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
   points(obs.sl.time, obs.sl.norm,pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
   # lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
-  polygon(c(obs.sl.time,rev(obs.sl.time)), c(obs.sl.norm+n.sig*obs.sl.err,rev(obs.sl.norm-n.sig*obs.sl.err)),
-          col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
+  # polygon(c(obs.sl.time,rev(obs.sl.time)), c(obs.sl.norm+n.sig*obs.sl.err,rev(obs.sl.norm-n.sig*obs.sl.err)),
+  #         col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
   abline(h=0,col="black",lty=2)
   
   # plot experts projections
@@ -1596,7 +1596,7 @@ if(TRUE){
        y=experts.density.2100$x,
        xaxt='n', yaxt='n', xaxs='i', yaxs='i',
        ylim=c(0,4),
-       xlim=c(0,4.35),
+       xlim=c(0,1.25),
        type="n",
        ann=FALSE,
        # xlab='Probability density',
@@ -1629,8 +1629,8 @@ if(TRUE){
   # lines(obs.sl.time, obs.sl.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
   points(obs.sl.time, obs.sl.norm,pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
   # lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
-  polygon(c(obs.sl.time,rev(obs.sl.time)), c(obs.sl.norm+n.sig*obs.sl.err,rev(obs.sl.norm-n.sig*obs.sl.err)),
-          col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
+  # polygon(c(obs.sl.time,rev(obs.sl.time)), c(obs.sl.norm+n.sig*obs.sl.err,rev(obs.sl.norm-n.sig*obs.sl.err)),
+  #         col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
   abline(h=0,col="black",lty=2)
   
   # plot standard projections
@@ -1655,7 +1655,7 @@ if(TRUE){
        y=standard.density.2100$x,
        xaxt='n', yaxt='n', xaxs='i', yaxs='i',
        ylim=c(0,4),
-       xlim=c(0,4.35),
+       xlim=c(0,1.25),
        type="n",
        ann=FALSE,
        # xlab='Probability density',
@@ -1683,13 +1683,13 @@ if(TRUE){
   # mtext(side=2, text='Total sea level [m]', line=2.3, cex=.9);
   mtext(side=2, text='[m]', line=2.3, cex=.9);
   mtext(side=3, text=expression(bold(' j) Complete Hindcasts')), line=.25, cex=.9, adj=0);
-  polygon(c(mod.time,rev(mod.time)), c(complete.slr.95,rev(complete.slr.05)), 
+  polygon(c(mod.time,rev(mod.time)), c(complete.slr.95,rev(complete.slr.05)),
           col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
   # lines(obs.sl.time, obs.sl.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
   points(obs.sl.time, obs.sl.norm,pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
   # lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
-  polygon(c(obs.sl.time,rev(obs.sl.time)), c(obs.sl.norm+n.sig*obs.sl.err,rev(obs.sl.norm-n.sig*obs.sl.err)),
-          col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
+  # polygon(c(obs.sl.time,rev(obs.sl.time)), c(obs.sl.norm+n.sig*obs.sl.err,rev(obs.sl.norm-n.sig*obs.sl.err)),
+  #         col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
   abline(h=0,col="black",lty=2) 
   
   
@@ -1715,7 +1715,7 @@ if(TRUE){
        y=complete.density.2100$x,
        xaxt='n', yaxt='n', xaxs='i', yaxs='i',
        ylim=c(0,4),
-       xlim=c(0,4.35),
+       xlim=c(0,1.25),
        type="n",
        ann=FALSE,
        # xlab='Probability density',
