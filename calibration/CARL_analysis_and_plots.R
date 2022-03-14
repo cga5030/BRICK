@@ -4,56 +4,56 @@ graphics.off()
 t.beg <- proc.time()
 
 ## Load pipeline files
-t.hind <- readRDS(file="priors_0118_t_hind.rds")
-t.proj <- readRDS(file="priors_0118_t_proj.rds")
-t.paleo <- readRDS(file="priors_0118_t_paleo.rds")
+t.hind <- readRDS(file="priors_0303_t_hind.rds")
+t.proj <- readRDS(file="priors_0303_t_proj.rds")
+t.paleo <- readRDS(file="priors_0303_t_paleo.rds")
 
 #####################################################################
 ## Priors
-priors.ais.paleo.05 <- readRDS(file="priors_0118_ais_paleo_05.rds")
-priors.ais.paleo.50 <- readRDS(file="priors_0118_ais_paleo_50.rds")
-priors.ais.paleo.95 <- readRDS(file="priors_0118_ais_paleo_95.rds")
+priors.ais.paleo.05 <- readRDS(file="priors_0303_ais_paleo_05.rds")
+priors.ais.paleo.50 <- readRDS(file="priors_0303_ais_paleo_50.rds")
+priors.ais.paleo.95 <- readRDS(file="priors_0303_ais_paleo_95.rds")
 
-priors.gsic.hind <- readRDS(file="priors_0118_gsic_hind.rds")
-priors.te.hind <- readRDS(file="priors_0118_te_hind.rds")
-priors.gis.hind <- readRDS(file="priors_0118_gis_hind.rds")
-priors.ais.hind <- readRDS(file="priors_0118_ais_hind.rds")
-priors.temp.hind <- readRDS(file="priors_0118_temp_hind.rds")
-priors.ocheat.hind <- readRDS(file="priors_0118_ocheat_hind.rds")
-priors.gsl.hind <- readRDS(file="priors_0118_gsl_hind.rds")
+priors.gsic.hind <- readRDS(file="priors_0303_gsic_hind.rds")
+priors.te.hind <- readRDS(file="priors_0303_te_hind.rds")
+priors.gis.hind <- readRDS(file="priors_0303_gis_hind.rds")
+priors.ais.hind <- readRDS(file="priors_0303_ais_hind.rds")
+priors.temp.hind <- readRDS(file="priors_0303_temp_hind.rds")
+priors.ocheat.hind <- readRDS(file="priors_0303_ocheat_hind.rds")
+priors.gsl.hind <- readRDS(file="priors_0303_gsl_hind.rds")
 
 # for projections
-priors.slr.rcp26 <- readRDS(file="priors_0118_slr_rcp26.rds")
-priors.te.rcp26 <- readRDS(file="priors_0118_te_rcp26.rds") 
-priors.gis.rcp26 <- readRDS(file="priors_0118_gis_rcp26.rds")
-priors.gsic.rcp26 <- readRDS(file="priors_0118_gsic_rcp26.rds")
-priors.ais.rcp26 <- readRDS(file="priors_0118_ais_rcp26.rds")
-priors.temp.rcp26 <- readRDS(file="priors_0118_temp_rcp26.rds")
-priors.ocheat.rcp26 <- readRDS(file="priors_0118_ocheat_rcp26.rds")
+priors.slr.rcp26 <- readRDS(file="priors_0303_slr_rcp26.rds")
+priors.te.rcp26 <- readRDS(file="priors_0303_te_rcp26.rds") 
+priors.gis.rcp26 <- readRDS(file="priors_0303_gis_rcp26.rds")
+priors.gsic.rcp26 <- readRDS(file="priors_0303_gsic_rcp26.rds")
+priors.ais.rcp26 <- readRDS(file="priors_0303_ais_rcp26.rds")
+priors.temp.rcp26 <- readRDS(file="priors_0303_temp_rcp26.rds")
+priors.ocheat.rcp26 <- readRDS(file="priors_0303_ocheat_rcp26.rds")
 #####################################################################
 
 #####################################################################
 ## Experts
-experts.ais.paleo.05 <- readRDS(file="experts_0118_ais_paleo_05.rds")
-experts.ais.paleo.50 <- readRDS(file="experts_0118_ais_paleo_50.rds")
-experts.ais.paleo.95 <- readRDS(file="experts_0118_ais_paleo_95.rds")
+experts.ais.paleo.05 <- readRDS(file="experts_0115_ais_paleo_05.rds")
+experts.ais.paleo.50 <- readRDS(file="experts_0115_ais_paleo_50.rds")
+experts.ais.paleo.95 <- readRDS(file="experts_0115_ais_paleo_95.rds")
 
-experts.gsic.hind <- readRDS(file="experts_0118_gsic_hind.rds")
-experts.te.hind <- readRDS(file="experts_0118_te_hind.rds")
-experts.gis.hind <- readRDS(file="experts_0118_gis_hind.rds")
-experts.ais.hind <- readRDS(file="experts_0118_ais_hind.rds")
-experts.temp.hind <- readRDS(file="experts_0118_temp_hind.rds")
-experts.ocheat.hind <- readRDS(file="experts_0118_ocheat_hind.rds")
-experts.gsl.hind <- readRDS(file="experts_0118_gsl_hind.rds")
+experts.gsic.hind <- readRDS(file="experts_0115_gsic_hind.rds")
+experts.te.hind <- readRDS(file="experts_0115_te_hind.rds")
+experts.gis.hind <- readRDS(file="experts_0115_gis_hind.rds")
+experts.ais.hind <- readRDS(file="experts_0115_ais_hind.rds")
+experts.temp.hind <- readRDS(file="experts_0115_temp_hind.rds")
+experts.ocheat.hind <- readRDS(file="experts_0115_ocheat_hind.rds")
+experts.gsl.hind <- readRDS(file="experts_0115_gsl_hind.rds")
 
 # for projections
-experts.slr.rcp26 <- readRDS(file="experts_0118_slr_rcp26.rds")
-experts.te.rcp26 <- readRDS(file="experts_0118_te_rcp26.rds") 
-experts.gis.rcp26 <- readRDS(file="experts_0118_gis_rcp26.rds")
-experts.gsic.rcp26 <- readRDS(file="experts_0118_gsic_rcp26.rds")
-experts.ais.rcp26 <- readRDS(file="experts_0118_ais_rcp26.rds")
-experts.temp.rcp26 <- readRDS(file="experts_0118_temp_rcp26.rds")
-experts.ocheat.rcp26 <- readRDS(file="experts_0118_ocheat_rcp26.rds")
+experts.slr.rcp26 <- readRDS(file="experts_0115_slr_rcp26.rds")
+experts.te.rcp26 <- readRDS(file="experts_0115_te_rcp26.rds") 
+experts.gis.rcp26 <- readRDS(file="experts_0115_gis_rcp26.rds")
+experts.gsic.rcp26 <- readRDS(file="experts_0115_gsic_rcp26.rds")
+experts.ais.rcp26 <- readRDS(file="experts_0115_ais_rcp26.rds")
+experts.temp.rcp26 <- readRDS(file="experts_0115_temp_rcp26.rds")
+experts.ocheat.rcp26 <- readRDS(file="experts_0115_ocheat_rcp26.rds")
 #####################################################################
 
 #####################################################################
@@ -848,6 +848,7 @@ if(FALSE){
           # dev.off()
 }
 
+if(FALSE){
 # pdf(paste(plotdir,'projections_SLR_total_with_noise_and_normalization.pdf',sep=''),width=3.5,height=2.45,colormodel='cmyk')
 png(paste(plotdir,'standard_projections.png',sep=''), width=866, height=516, units ="px")
 
@@ -882,7 +883,7 @@ legend(
        col=c(rgb(col26[1],col26[2],col26[3],.5), rgb(col26[1],col26[2],col26[3])))
 
 dev.off()
-
+}
 ##==============================================================================
 ##==============================================================================
 
@@ -1761,6 +1762,201 @@ if(TRUE){
 ##==============================================================================
 
 
+
+##==============================================================================
+##==============================================================================
+## PDFs
+
+# AIS Contributions to SLR
+sl.2100.ais.complete <- complete.ais.rcp26[nrow(complete.ais.rcp26),]
+sl.2100.ais.standard <- standard.ais.rcp26[nrow(standard.ais.rcp26),]
+sl.2100.ais.experts <- experts.ais.rcp26[nrow(experts.ais.rcp26),]
+sl.2100.ais.priors <- priors.ais.rcp26[nrow(priors.ais.rcp26),]
+
+density.ais.complete <- density(sl.2100.ais.complete)
+density.ais.standard <- density(sl.2100.ais.standard)
+density.ais.experts  <- density(sl.2100.ais.experts)
+density.ais.priors   <- density(sl.2100.ais.priors)
+
+# AIS Contributions to SLR
+sl.2100.gis.complete <- complete.gis.rcp26[nrow(complete.gis.rcp26),]
+sl.2100.gis.standard <- standard.gis.rcp26[nrow(standard.gis.rcp26),]
+sl.2100.gis.experts <- experts.gis.rcp26[nrow(experts.gis.rcp26),]
+sl.2100.gis.priors <- priors.gis.rcp26[nrow(priors.gis.rcp26),]
+
+density.gis.complete <- density(sl.2100.gis.complete)
+density.gis.standard <- density(sl.2100.gis.standard)
+density.gis.experts  <- density(sl.2100.gis.experts)
+density.gis.priors   <- density(sl.2100.gis.priors)
+
+# Total SLR
+sl.2100.complete <- complete.slr.rcp26[nrow(complete.slr.rcp26),]
+sl.2100.standard <- standard.slr.rcp26[nrow(standard.slr.rcp26),]
+sl.2100.experts  <- experts.slr.rcp26[nrow(experts.slr.rcp26),]
+sl.2100.priors   <- priors.slr.rcp26[nrow(priors.slr.rcp26),]
+
+density.complete <- density(sl.2100.complete)
+density.standard <- density(sl.2100.standard)
+density.experts  <- density(sl.2100.experts)
+density.priors   <- density(sl.2100.priors)
+
+## mycol colors, by row:
+# 1 black
+# 2 dark blue
+# 3 aqua
+# 4 pink
+# 5 light orange
+# 6 purple
+# 7 blue
+# 8 light purple
+# 9 light blue
+# 10 very light blue
+# 11 dark red
+# 12 brown
+# 13 dark orange
+# 14 neon green
+# 15 neon yellow
+mycol_experts <- 5
+mycol_standard <- 1
+mycol_complete <- 9
+mycol_priors <- 1
+
+
+if (TRUE){
+par(mfrow=c(4,1),
+    mai=c(.2,1,.4,1) #c(bottom, left, top, right) 
+)
+mylwd = 2
+mycexlab = 1.35
+myxlim = c(-1,4.5)
+
+## AIS
+myylim <- max(pmax(density.ais.complete$y,density.ais.standard$y,density.ais.experts$y,density.ais.priors$y))
+plot(density.ais.standard$x, density.ais.standard$y, 
+     xlim=myxlim,
+     ylim=c(0,myylim),
+     axes = FALSE,
+     type="l",
+     lwd=mylwd, col=mycol.rgb[mycol_standard],
+     yaxt='n',
+     ylab='',
+     xlab=''
+)
+abline(v=0, lty="dashed")
+axis(2,labels=FALSE,tick=FALSE)
+axis(1,labels=FALSE)
+title(ylab="Probability density",cex.lab=mycexlab)
+box()
+mtext(side=3, text=expression(bold(' a) Antarctic Ice Sheet Contributions to Sea-Level Rise')), line=.25, cex=.9, adj=0);
+
+
+lines(density.ais.experts$x, density.ais.experts$y,
+      lwd=mylwd, col=mycol.rgb[mycol_experts], lty="dashed"
+)
+
+lines(density.ais.priors$x, density.ais.priors$y,
+      lwd=mylwd, col=mycol.rgb[mycol_priors], lty="dashed")
+
+lines(density.ais.complete$x,density.ais.complete$y,
+      lwd=mylwd, col=mycol.rgb[mycol_complete]
+)
+
+## GIS
+myylim <- max(pmax(density.gis.complete$y,density.gis.standard$y,density.gis.experts$y,density.gis.priors$y))
+plot(density.gis.standard$x, density.gis.standard$y, 
+     xlim=myxlim,
+     ylim=c(0,myylim),
+     axes = FALSE,
+     type="l",
+     lwd=mylwd, col=mycol.rgb[mycol_standard],
+     yaxt='n',
+     ylab='',
+     xlab=''
+)
+abline(v=0, lty="dashed")
+axis(2,labels=FALSE,tick=FALSE)
+axis(1,labels=FALSE)
+title(ylab="Probability density",cex.lab=mycexlab)
+box()
+mtext(side=3, text=expression(bold(' b) Greenland Ice Sheet Contributions to Sea-Level Rise')), line=.25, cex=.9, adj=0);
+
+
+lines(density.gis.experts$x, density.gis.experts$y,
+      lwd=mylwd, col=mycol.rgb[mycol_experts], lty="dashed"
+)
+
+lines(density.gis.priors$x, density.gis.priors$y,
+      lwd=mylwd, col=mycol.rgb[mycol_priors], lty="dashed")
+
+lines(density.gis.complete$x,density.gis.complete$y,
+      lwd=mylwd, col=mycol.rgb[mycol_complete]
+)
+
+## TOTAL SLR
+myylim <- max(pmax(density.complete$y,density.standard$y,density.experts$y,density.priors$y))
+plot(density.standard$x, density.standard$y, 
+     xlim=myxlim,
+     ylim=c(0,myylim),
+     axes = FALSE,
+     type="l",
+     lwd=mylwd, col=mycol.rgb[mycol_standard],
+     yaxt='n',
+     ylab='',
+     xlab=''
+)
+abline(v=0, lty="dashed")
+axis(2,labels=FALSE,tick=FALSE)
+axis(1)
+title(ylab="Probability density",cex.lab=mycexlab)
+box()
+mtext("Projected global mean sea level in 2100",side=1,line=3)
+mtext("relative to 1986-2005 average [m]",side=1,line=4.5)
+mtext(side=3, text=expression(bold(' c) Total Sea-Level Rise')), line=.25, cex=.9, adj=0);
+
+
+lines(density.experts$x, density.experts$y,
+      lwd=mylwd, col=mycol.rgb[mycol_experts], lty="dashed"
+)
+
+lines(density.priors$x, density.priors$y,
+      lwd=mylwd, col=mycol.rgb[mycol_priors], lty="dashed")
+
+lines(density.complete$x,density.complete$y,
+      lwd=mylwd, col=mycol.rgb[mycol_complete]
+)
+
+# ## Expert assessment
+# meanlog = 0.147
+# sdlog = 0.444
+# 
+# quantiles_2100H <- c(.43,.62,.79,1.11,1.74,2.38,3.29) # GLOBAL SLR FROM BAMBER TABLE 2, 2100 H
+# grid = seq(-10,4.50,.01)
+# lines(grid,dlnorm(grid,meanlog,sdlog))
+
+## LEGEND
+plot(1, type = "n", axes=FALSE, xlab="", ylab=""
+     # ,main="Global mean sea level at 2100 [m]"
+)
+legend(x = "center",inset = 0,
+       legend = c("Wide priors combined with expert assessment and data" , 
+                  "Wide priors combined with data",
+                  "Wide priors combined with expert assessment",
+                  "Wide priors"
+       ),
+       lwd=c(mylwd,mylwd,mylwd,mylwd),
+       lty=c("solid",
+             "solid",
+             "dashed",
+             "dashed"),
+       bty='n', cex=mycexlab,
+       col=c(mycol.rgb[mycol_complete],
+             mycol.rgb[mycol_standard],
+             mycol.rgb[mycol_experts],
+             mycol.rgb[mycol_priors]), 
+       horiz = FALSE,
+       
+)
+}
 ## Save workspace image
 t.end <- proc.time()
 time.elapsed <- t.end - t.beg
