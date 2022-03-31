@@ -348,12 +348,12 @@ if(FALSE){
   
   if(plotall){
     # >>> SURFACE TEMPERATURE <<<
-    plot(mod.time[midx.temp], standard.temp.50[midx.temp], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
+    plot(mod.time[midx.temp], complete.temp.50[midx.temp], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
          ylab='', xlim=c(1850,2016), ylim=c(-.3,1.5), cex.axis=1.2);
     mtext(side=1, text='Year', line=2.3, cex=.9);
     mtext(side=2, text='Surface temperature\n[deg C]', line=2.3, cex=.9);
     # mtext(side=3, text=expression(bold(' a')), line=.25, cex=.9, adj=0);
-    polygon(c(mod.time[midx.temp],rev(mod.time[midx.temp])), c(standard.temp.95,rev(standard.temp.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+    polygon(c(mod.time[midx.temp],rev(mod.time[midx.temp])), c(complete.temp.95,rev(complete.temp.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
     lines(obs.temp.time[oidx.temp], obs.temp.norm[oidx.temp], type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
     lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
     polygon(c(obs.temp.time[oidx.temp],rev(obs.temp.time[oidx.temp])),
@@ -363,28 +363,28 @@ if(FALSE){
     #       col=c(rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]),rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3])), lwd=2, bty='n', cex=1.2)
     
     # >>> OCEAN HEAT <<<
-    itmp=midx.ocheat[1]:nrow(standard.ocheat.hind)
-    plot(mod.time[itmp], standard.ocheat.50[itmp], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
+    itmp=midx.ocheat[1]:nrow(complete.ocheat.hind)
+    plot(mod.time[itmp], complete.ocheat.50[itmp], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
          ylab='', xlim=c(1950,2016), ylim=c(-50,50), cex.lab=1.2, cex.axis=1.2);
     mtext(side=1, text='Year', line=2.3, cex=.9);
     mtext(side=2, text='Ocean heat uptake\n[10^22 J]', line=2.3, cex=.9);
     # mtext(side=3, text=expression(bold(' b')), line=.25, cex=.9, adj=0);
-    polygon(c(mod.time[itmp],rev(mod.time[itmp])), c(standard.ocheat.95[itmp],rev(standard.ocheat.05[itmp])), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+    polygon(c(mod.time[itmp],rev(mod.time[itmp])), c(complete.ocheat.95[itmp],rev(complete.ocheat.05[itmp])), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
     lines(obs.ocheat.time, obs.ocheat.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
     lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
     polygon(c(obs.ocheat.time,rev(obs.ocheat.time)), c(obs.ocheat.norm+n.sig*obs.ocheat.err,rev(obs.ocheat.norm-n.sig*obs.ocheat.err)),
             col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
   }
   # >>> GSIC <<<
-  itmp=midx.gsic[1]:nrow(standard.gsic.hind)
-  plot(mod.time[itmp], standard.gsic.50[itmp], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
+  itmp=midx.gsic[1]:nrow(complete.gsic.hind)
+  plot(mod.time[itmp], complete.gsic.50[itmp], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
        ylab='', xlim=c(1950,2016), ylim=c(-.01,.04), cex.lab=1.2, cex.axis=1.2);
   mtext(side=1, text='Year', line=2.3, cex=.9);
   # mtext(side=2, text='Glaciers and\nsmall ice caps [m SLE]', line=2.3, cex=.9);
   mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
   # mtext(side=3, text=expression(bold(' c')), line=.25, cex=.9, adj=0);
   mtext(side=3, text=expression(bold(' a) Glaciers and Ice Caps')), line=.25, cex=.9, adj=0);
-  polygon(c(mod.time[itmp],rev(mod.time[itmp])), c(standard.gsic.95[itmp],rev(standard.gsic.05[itmp])), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+  polygon(c(mod.time[itmp],rev(mod.time[itmp])), c(complete.gsic.95[itmp],rev(complete.gsic.05[itmp])), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
   # lines(obs.gsic.time, obs.gsic.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
   points(obs.gsic.time, obs.gsic.norm, pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
   lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
@@ -397,13 +397,13 @@ if(FALSE){
   #         lty="dashed");
   
   # >>> GIS <<<
-  plot(mod.time, standard.gis.50, type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
+  plot(mod.time, complete.gis.50, type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
        ylab='', xlim=c(1950,2016), ylim=c(-.003,.01), cex.lab=1.2, cex.axis=1.2);
   mtext(side=1, text='Year', line=2.3, cex=.9);
   # mtext(side=2, text='Greenland Ice Sheet\n[m SLE]', line=2.3, cex=.9);
   mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
   mtext(side=3, text=expression(bold(' b) Greenland Ice Sheet')), line=.25, cex=.9, adj=0);
-  polygon(c(mod.time,rev(mod.time)), c(standard.gis.95,rev(standard.gis.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+  polygon(c(mod.time,rev(mod.time)), c(complete.gis.95,rev(complete.gis.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
   # lines(obs.gis.time, obs.gis.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
   points(obs.gis.time, obs.gis.norm, pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
   lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
@@ -417,13 +417,13 @@ if(FALSE){
   
   # >>> TE <<<
   x1971=seq(trends.te[1,4],trends.te[1,5])
-  c1971=mean(x1971); yc1971=standard.te.50[which(mod.time==mean(x1971))]
+  c1971=mean(x1971); yc1971=complete.te.50[which(mod.time==mean(x1971))]
   lo1971 = yc1971+(trends.te[1,2]/1000)*(x1971-c1971)
   hi1971 = yc1971+(trends.te[1,3]/1000)*(x1971-c1971)
   y1971 = yc1971+(trends.te[1,1]/1000)*(x1971-c1971)
 
   x1993=seq(trends.te[2,4],trends.te[2,5])
-  c1993=mean(x1993); yc1993=standard.te.50[which(mod.time==mean(x1993))]
+  c1993=mean(x1993); yc1993=complete.te.50[which(mod.time==mean(x1993))]
   lo1993 = yc1993+(trends.te[2,2]/1000)*(x1993-c1993)
   hi1993 = yc1993+(trends.te[2,3]/1000)*(x1993-c1993)
   y1993 = yc1993+(trends.te[2,1]/1000)*(x1993-c1993)
@@ -454,13 +454,13 @@ if(FALSE){
   # hi1993 <- readRDS("TE_hi1993.rds")
   # y1993 <- readRDS("TE_y1993.rds")
   
-  plot(mod.time, standard.te.50, type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
+  plot(mod.time, complete.te.50, type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
        ylab='', xlim=c(1950,2016), ylim=c(-.04,.06), cex.lab=1.2, cex.axis=1.2);
   mtext(side=1, text='Year', line=2.3, cex=.9);
   # mtext(side=2, text='Thermal expansion\n[m SLE]', line=2.3, cex=.9);
   mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
   mtext(side=3, text=expression(bold(' c) Thermal Expansion')), line=.25, cex=.9, adj=0);
-  polygon(c(mod.time,rev(mod.time)), c(standard.te.95,rev(standard.te.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+  polygon(c(mod.time,rev(mod.time)), c(complete.te.95,rev(complete.te.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
   lines(x1971,y1971, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
   # points(x1971,y1971, pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
   polygon(c(x1971,rev(x1971)), c(lo1971,rev(hi1971)), col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
@@ -470,13 +470,13 @@ if(FALSE){
   polygon(c(x1993,rev(x1993)), c(lo1993,rev(hi1993)), col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.5), border=NA);
   
   # >>> TOTAL SLR <<<
-  plot(mod.time, standard.slr.50, type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
+  plot(mod.time, complete.slr.50, type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
        ylab='', xlim=c(1850,2016), ylim=c(-.3,.2), cex.lab=1.2, cex.axis=1.2);
   mtext(side=1, text='Year', line=2.3, cex=.9);
   # mtext(side=2, text='Total sea level [m]', line=2.3, cex=.9);
   mtext(side=2, text='[m]', line=2.3, cex=.9);
   mtext(side=3, text=expression(bold(' d) Total Sea Level')), line=.25, cex=.9, adj=0);
-  polygon(c(mod.time,rev(mod.time)), c(standard.slr.95,rev(standard.slr.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+  polygon(c(mod.time,rev(mod.time)), c(complete.slr.95,rev(complete.slr.05)), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
   # lines(obs.sl.time, obs.sl.norm, type='l', col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]), lwd=2);
   points(obs.sl.time, obs.sl.norm,pch=20, col=rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]));
   lines(c(-1e6,1e6),c(0,0),type='l',lty=2,col='black');
@@ -488,9 +488,9 @@ if(FALSE){
   
   
   # >>> AIS PALEO, SMOOTHED <<<
-  ipaleo=which(standard.t.paleo==-149999):which(standard.t.paleo==1)
-  plot(standard.t.paleo[ipaleo], standard.ais.paleo.50[ipaleo], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
-       ylab='', xlim=c(standard.t.paleo[ipaleo[1]],standard.t.paleo[ipaleo[length(ipaleo)]]),
+  ipaleo=which(t.paleo==-149999):which(t.paleo==1)
+  plot(t.paleo[ipaleo], complete.ais.paleo.50[ipaleo], type='l', col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), lwd=2, xlab='',
+       ylab='', xlim=c(t.paleo[ipaleo[1]],t.paleo[ipaleo[length(ipaleo)]]),
        # ylim=c(-20,10),
        ylim=c(-20,16),
        cex.lab=1.2, cex.axis=1.2);
@@ -498,7 +498,7 @@ if(FALSE){
   # mtext(side=2, text='Antarctic Ice Sheet\n[m SLE]', line=2.3, cex=.9);
   mtext(side=2, text='[m SLE]', line=2.3, cex=.9);
   mtext(side=3, text=expression(bold(' e) Antarctic Ice Sheet')), line=.25, cex=.9, adj=0);
-  polygon(c(standard.t.paleo[ipaleo],rev(standard.t.paleo[ipaleo])), c(standard.ais.paleo.95[ipaleo],rev(standard.ais.paleo.05[ipaleo])), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
+  polygon(c(t.paleo[ipaleo],rev(t.paleo[ipaleo])), c(complete.ais.paleo.95[ipaleo],rev(complete.ais.paleo.05[ipaleo])), col=rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5), border=NA);
   for (i in 1:3) {
     polygon(c( date[c(obs.years[i]-1000,obs.years[i]+1000)], rev(date[c(obs.years[i]-1000,obs.years[i]+1000)]) ),
             c( c(windows[i,2],windows[i,2])                , rev(c(windows[i,1],windows[i,1]))                 ),
@@ -513,15 +513,16 @@ if(FALSE){
   legend(x = "top",inset = 0,
          legend = c("median, model" ,
                     "5-95% range, model",
-                    "observations",
-                    "2-sigma range, observations"),
+                    "observations"#,
+                    # "2-sigma range, observations"
+                    ),
          # fill=c(rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]), rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3])),
          lwd=c(2,8,NA,8), bty='n', cex=1.2,
          pch=c(NA,NA,20,NA),
          col=c(rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3]),
                rgb(mycol[colmod,1],mycol[colmod,2],mycol[colmod,3],.5),
-               rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3]),
-               rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.7)
+               rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3])#,
+               # rgb(mycol[colobs,1],mycol[colobs,2],mycol[colobs,3],.7)
                ), 
                horiz = FALSE)
   
