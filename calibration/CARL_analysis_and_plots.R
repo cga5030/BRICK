@@ -1820,22 +1820,29 @@ density.priors   <- density(sl.2100.priors)
 mycol_experts <- 5
 mycol_standard <- 1
 mycol_complete <- 9
-mycol_priors <- 1
+mycol_priors <- 11
 
 
 if (TRUE){
-par(mfrow=c(4,1),
-    mai=c(.2,1,.4,1) #c(bottom, left, top, right) 
-)
+dev.off()
+layout(cbind(c(1,1,4),c(1,1,4),c(1,1,4),c(2,3,4)))
+
+# width by height: 658 by 693
+
+par(mai=c(.15,.3,.3,.2), #c(bottom, left, top, right)
+    oma=c(1,2,1,3) #c(bottom, left, top, right)
+    )  
+  
+
 mylwd = 2
 mycexlab = 1.35
-myxlim = c(-1,4.5)
+# myylim = c(-1,4.5)
 
-## AIS
-myylim <- max(pmax(density.ais.complete$y,density.ais.standard$y,density.ais.experts$y,density.ais.priors$y))
-plot(density.ais.standard$x, density.ais.standard$y, 
-     xlim=myxlim,
-     ylim=c(0,myylim),
+## TOTAL SLR
+myxlim <- max(pmax(density.complete$y,density.standard$y,density.experts$y,density.priors$y))
+plot(density.standard$y, density.standard$x, 
+     xlim=c(0,1.6),
+     # ylim=c(-.5,3.5),
      axes = FALSE,
      type="l",
      lwd=mylwd, col=mycol.rgb[mycol_standard],
@@ -1843,30 +1850,65 @@ plot(density.ais.standard$x, density.ais.standard$y,
      ylab='',
      xlab=''
 )
-abline(v=0, lty="dashed")
-axis(2,labels=FALSE,tick=FALSE)
-axis(1,labels=FALSE)
-title(ylab="Probability density",cex.lab=mycexlab)
+# abline(h=0, lty="dashed")
+axis(1,labels=FALSE,tick=FALSE)
+axis(2, seq(0.5,3.5,by=.5), lab=c('','1','','2','','3',''))
+# title(ylab="Probability density",cex.lab=mycexlab)
 box()
-mtext(side=3, text=expression(bold(' a) Antarctic Ice Sheet Contributions to Sea-Level Rise')), line=.25, cex=.9, adj=0);
+# mtext("Projected global mean sea level in 2100",side=2,line=3)
+# mtext("relative to 1986-2005 average [m]",side=2,line=2)
+mtext("[m]",side=2,line=2, cex=.9)
+mtext(side=3, text=expression(bold(' a) Global mean sea level')), line=.25, cex=.9, adj=0);
+mtext("Probability density",side=1,line=0.5)
 
 
-lines(density.ais.experts$x, density.ais.experts$y,
-      lwd=mylwd, col=mycol.rgb[mycol_experts], lty="dashed"
+# lines(density.experts$y, density.experts$x,
+#       lwd=mylwd, col=mycol.rgb[mycol_experts], lty="dashed"
+# )
+# 
+# lines(density.priors$y, density.priors$x,
+#       lwd=mylwd, col=mycol.rgb[mycol_priors], lty="dashed")
+
+lines(density.complete$y,density.complete$x,
+      lwd=mylwd, col=mycol.rgb[mycol_complete]
 )
 
-lines(density.ais.priors$x, density.ais.priors$y,
-      lwd=mylwd, col=mycol.rgb[mycol_priors], lty="dashed")
+## AIS
+myxlim <- max(pmax(density.ais.complete$y,density.ais.standard$y,density.ais.experts$y,density.ais.priors$y))
+plot(density.ais.standard$y, density.ais.standard$x, 
+     xlim=c(0,myxlim),
+     ylim=c(0,1),
+     axes = FALSE,
+     type="l",
+     lwd=mylwd, col=mycol.rgb[mycol_standard],
+     yaxt='n',
+     ylab='',
+     xlab=''
+)
+# abline(h=0, lty="dashed")
+axis(1,labels=FALSE,tick=FALSE)
+axis(2, seq(0,1,by=0.25), lab=c('0','','0.5','','1'))
+box()
+mtext("[m]",side=2,line=2, cex=.8)
+mtext(side=3, text=expression(bold(' b) AIS contribution')), line=.25, cex=.9, adj=0);
+mtext("Probability density",side=1,line=0.2, cex=.8)
 
-lines(density.ais.complete$x,density.ais.complete$y,
+# lines(density.ais.experts$y, density.ais.experts$x,
+#       lwd=mylwd, col=mycol.rgb[mycol_experts], lty="dashed"
+# )
+# 
+# lines(density.ais.priors$y, density.ais.priors$x,
+#       lwd=mylwd, col=mycol.rgb[mycol_priors], lty="dashed")
+
+lines(density.ais.complete$y,density.ais.complete$x,
       lwd=mylwd, col=mycol.rgb[mycol_complete]
 )
 
 ## GIS
-myylim <- max(pmax(density.gis.complete$y,density.gis.standard$y,density.gis.experts$y,density.gis.priors$y))
-plot(density.gis.standard$x, density.gis.standard$y, 
-     xlim=myxlim,
-     ylim=c(0,myylim),
+myxlim <- max(pmax(density.gis.complete$y,density.gis.standard$y,density.gis.experts$y,density.gis.priors$y))
+plot(density.gis.standard$y, density.gis.standard$x, 
+     xlim=c(0,myxlim),
+     ylim=c(0,2.5),
      axes = FALSE,
      type="l",
      lwd=mylwd, col=mycol.rgb[mycol_standard],
@@ -1874,90 +1916,66 @@ plot(density.gis.standard$x, density.gis.standard$y,
      ylab='',
      xlab=''
 )
-abline(v=0, lty="dashed")
-axis(2,labels=FALSE,tick=FALSE)
-axis(1,labels=FALSE)
-title(ylab="Probability density",cex.lab=mycexlab)
+# abline(h=0, lty="dashed")
+axis(1,labels=FALSE,tick=FALSE)
+axis(2, seq(0,2.5,by=0.5), lab=c('0','','1','','2',''))
 box()
-mtext(side=3, text=expression(bold(' b) Greenland Ice Sheet Contributions to Sea-Level Rise')), line=.25, cex=.9, adj=0);
+mtext("[m]",side=2,line=2, cex=.8)
+mtext(side=3, text=expression(bold(' c) GIS contribution')), line=.25, cex=.9, adj=0);
+mtext("Probability density",side=1,line=0.2, cex=.8)
 
-
-lines(density.gis.experts$x, density.gis.experts$y,
-      lwd=mylwd, col=mycol.rgb[mycol_experts], lty="dashed"
-)
-
-lines(density.gis.priors$x, density.gis.priors$y,
-      lwd=mylwd, col=mycol.rgb[mycol_priors], lty="dashed")
-
-lines(density.gis.complete$x,density.gis.complete$y,
-      lwd=mylwd, col=mycol.rgb[mycol_complete]
-)
-
-## TOTAL SLR
-myylim <- max(pmax(density.complete$y,density.standard$y,density.experts$y,density.priors$y))
-plot(density.standard$x, density.standard$y, 
-     xlim=myxlim,
-     ylim=c(0,myylim),
-     axes = FALSE,
-     type="l",
-     lwd=mylwd, col=mycol.rgb[mycol_standard],
-     yaxt='n',
-     ylab='',
-     xlab=''
-)
-abline(v=0, lty="dashed")
-axis(2,labels=FALSE,tick=FALSE)
-axis(1)
-title(ylab="Probability density",cex.lab=mycexlab)
-box()
-mtext("Projected global mean sea level in 2100",side=1,line=3)
-mtext("relative to 1986-2005 average [m]",side=1,line=4.5)
-mtext(side=3, text=expression(bold(' c) Total Sea-Level Rise')), line=.25, cex=.9, adj=0);
-
-
-lines(density.experts$x, density.experts$y,
-      lwd=mylwd, col=mycol.rgb[mycol_experts], lty="dashed"
-)
-
-lines(density.priors$x, density.priors$y,
-      lwd=mylwd, col=mycol.rgb[mycol_priors], lty="dashed")
-
-lines(density.complete$x,density.complete$y,
-      lwd=mylwd, col=mycol.rgb[mycol_complete]
-)
-
-# ## Expert assessment
-# meanlog = 0.147
-# sdlog = 0.444
+# lines(density.gis.experts$y, density.gis.experts$x,
+#       lwd=mylwd, col=mycol.rgb[mycol_experts], lty="dashed"
+# )
 # 
-# quantiles_2100H <- c(.43,.62,.79,1.11,1.74,2.38,3.29) # GLOBAL SLR FROM BAMBER TABLE 2, 2100 H
-# grid = seq(-10,4.50,.01)
-# lines(grid,dlnorm(grid,meanlog,sdlog))
+# lines(density.gis.priors$y, density.gis.priors$x,
+#       lwd=mylwd, col=mycol.rgb[mycol_priors], lty="dashed")
+
+lines(density.gis.complete$y,density.gis.complete$x,
+      lwd=mylwd, col=mycol.rgb[mycol_complete]
+)
+
 
 ## LEGEND
 plot(1, type = "n", axes=FALSE, xlab="", ylab=""
      # ,main="Global mean sea level at 2100 [m]"
 )
-legend(x = "center",inset = 0,
+legend(x = "top",inset = 0,
        legend = c("Wide priors combined with expert assessment and data" , 
                   "Wide priors combined with data",
-                  "Wide priors combined with expert assessment",
-                  "Wide priors"
+                  "SEJ2018 Expert Assessment, high-temperature scenario",
+                  "IPCC AR6, RCP 8.5 likely range"
        ),
        lwd=c(mylwd,mylwd,mylwd,mylwd),
        lty=c("solid",
              "solid",
-             "dashed",
-             "dashed"),
+             "solid",
+             "solid"),
        bty='n', cex=mycexlab,
        col=c(mycol.rgb[mycol_complete],
              mycol.rgb[mycol_standard],
              mycol.rgb[mycol_experts],
-             mycol.rgb[mycol_priors]), 
+             mycol.rgb[mycol_priors],
+             "#c77d7dff"
+             ), 
        horiz = FALSE,
        
 )
 }
+
+
+
+
+
+
+complete_parameters_good <- readRDS("complete_0115_parameters_good.rds")
+
+
+
+
+
+
+
 ## Save workspace image
 t.end <- proc.time()
 time.elapsed <- t.end - t.beg
