@@ -4574,6 +4574,14 @@ if(TRUE){
   # 13 dark orange
   # 14 neon green
   # 15 neon yellow
+
+  col_priors <- 2
+  col_experts <- 2
+  col_standard <- 2
+  col_complete <- 2
+  col_obs <- 11
+  col_density <- 1
+  opacity <- 0.5
   
 
   col_GIS <- 9
